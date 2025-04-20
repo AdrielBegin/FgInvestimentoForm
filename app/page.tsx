@@ -64,7 +64,7 @@ export default function Home() {
         setFormData((prev) => ({
           ...prev,
           estado: response.data.uf,
-          cidade:response.data.localidade,
+          cidade: response.data.localidade,
         }));
       }
     }
@@ -112,90 +112,89 @@ export default function Home() {
               <h1 className="text-2xl font-bold text-center mb-6">Formulário de Inscrição</h1>
 
               <form onSubmit={handleSubmit} className="space-y-4">
-                <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-1">
-                    Nome Completo
-                  </label>
-                  <input
-                    type="text"
-                    name="nome"
-                    value={formData.nome}
-                    onChange={handleChange}
-                    className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-                    required
-                  />
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700 mb-1">
+                      Nome Completo
+                    </label>
+                    <input
+                      type="text"
+                      name="nome"
+                      value={formData.nome}
+                      onChange={handleChange}
+                      className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                      required
+                    />
+                  </div>
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700 mb-1">
+                      CEP
+                    </label>
+                    <input
+                      type="text"
+                      name="cep"
+                      value={formData.cep}
+                      onChange={handleCepChange}
+                      className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                      required
+                    />
+                  </div>
+
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700 mb-1">
+                      E-mail
+                    </label>
+                    <input
+                      type="email"
+                      name="email"
+                      value={formData.email}
+                      onChange={handleChange}
+                      className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                      required
+                    />
+                  </div>
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700 mb-1">
+                      Estado
+                    </label>
+                    <input
+                      type="text"
+                      name="estado"
+                      value={formData.estado}
+                      onChange={handleChange}
+                      className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                    />
+                  </div>
+
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700 mb-1">
+                      CPF
+                    </label>
+                    <input
+                      type="text"
+                      name="cpfCnpj"
+                      value={formData.cpfCnpj}
+                      onChange={handleChange}
+                      maxLength={18}
+                      className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                    />
+                  </div>
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700 mb-1">
+                      Cidade
+                    </label>
+                    <input
+                      type="text"
+                      name="cidade"
+                      value={formData.cidade}
+                      onChange={handleChange}
+                      className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                    />
+                  </div>
                 </div>
 
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-1">
-                    E-mail
-                  </label>
-                  <input
-                    type="email"
-                    name="email"
-                    value={formData.email}
-                    onChange={handleChange}
-                    className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-                    required
-                  />
-                </div>
-
-                <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-1">
-                    CPF
-                  </label>
-                  <input
-                    type="text"
-                    name="cpfCnpj"
-                    value={formData.cpfCnpj}
-                    onChange={handleChange}
-                    maxLength={18}
-                    className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-                  />
-                </div>
-
-                <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-1">
-                    CEP
-                  </label>
-                  <input
-                    type="text"
-                    name="cep"
-                    value={formData.cep}
-                    onChange={handleCepChange}
-                    className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-                    required
-                  />
-                </div>
-
-                <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-1">
-                    Estado
-                  </label>
-                  <input
-                    type="text"
-                    name="estado"
-                    value={formData.estado}
-                    onChange={handleChange}
-                    className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-                  />
-                </div>
-
-                <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-1">
-                    Cidade
-                  </label>
-                  <input
-                    type="text"
-                    name="cidade"
-                    value={formData.cidade}
-                    onChange={handleChange}
-                    className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-                  />
-                </div>
-
-                <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-1">
+                  <label className="block text-sm font-medium text-gray-700 mb-1 mt-4">
                     Curso
                   </label>
                   <select
@@ -208,8 +207,8 @@ export default function Home() {
                   </select>
                 </div>
 
-                <div className="bg-gray-50 p-3 rounded-md">
-                  <p className="text-lg font-semibold text-center">Valor Total: R$ 2.000,00</p>
+                <div className="bg-gray-50 p-3 rounded-md text-center">
+                  <p className="text-lg font-semibold">Valor Total: R$ 2.000,00</p>
                 </div>
 
                 <button
