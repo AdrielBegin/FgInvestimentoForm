@@ -22,7 +22,7 @@ export default function FormularioMercadoPago() {
   if (loading) {
     return <div>Carregando...</div>;
   }
-  
+
   if (!user) {
     return null;
   }
@@ -161,26 +161,9 @@ export default function FormularioMercadoPago() {
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
                   </svg>
                 </div>
-                <span>Acesso vitalício</span>
-              </div>
-              <div className="flex items-start">
-                <div className="flex-shrink-0 h-6 w-6 rounded-full bg-yellow-500 flex items-center justify-center mr-3 mt-1">
-                  <svg className="h-4 w-4 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
-                  </svg>
-                </div>
-                <span>Certificado de conclusão</span>
-              </div>
-              <div className="flex items-start">
-                <div className="flex-shrink-0 h-6 w-6 rounded-full bg-yellow-500 flex items-center justify-center mr-3 mt-1">
-                  <svg className="h-4 w-4 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
-                  </svg>
-                </div>
                 <span>Suporte especializado</span>
               </div>
             </div>
-
             <div className="bg-white/20 p-4 rounded-lg">
               <p className="text-sm opacity-90 mb-1">Investimento total</p>
               <p className="text-2xl font-bold">R$ 2.000,00</p>
@@ -287,9 +270,10 @@ export default function FormularioMercadoPago() {
                   name="modalidadeDeAula"
                   value={formData.modalidadeDeAula}
                   onChange={handleChange}
+                  required
                   className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent transition-all"
                 >
-                  <option>Selecione tipo de participação</option>
+                  <option></option>
                   {modalidadeDeAulas.map((aula) => (
                     <option key={aula.value} value={aula.value}>
                       {aula.label}

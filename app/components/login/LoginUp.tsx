@@ -51,7 +51,7 @@ export default function Login() {
             />
           </div>
 
-          <h2 className="text-3xl font-bold mb-4 text-center">Bem-vindo de volta!</h2>
+          <h2 className="text-3xl font-bold mb-4 text-center">Bem-vindo!</h2>
           <p className="text-center opacity-90 mb-8">
             Acesse sua conta para continuar de onde parou.
           </p>
