@@ -5,6 +5,7 @@ import { useRouter } from 'next/navigation';
 import { FaGoogle } from 'react-icons/fa';
 import fg from '@/app/logo/LogoFG.svg';
 import Image from 'next/image';
+import Link from "next/link";
 
 export default function Login() {
   const [email, setEmail] = useState('');
@@ -41,20 +42,20 @@ export default function Login() {
         {/* Left Side - Logo and Welcome */}
         <div className="w-full md:w-1/2 bg-blue-600 p-12 flex flex-col items-center justify-center text-white">
           <div className="mb-8">
-            <Image 
-              src={fg} 
-              alt="Logo" 
-              width={200} 
+            <Image
+              src={fg}
+              alt="Logo"
+              width={200}
               height={200}
               className="filter brightness-0 invert"
             />
           </div>
-          
+
           <h2 className="text-3xl font-bold mb-4 text-center">Bem-vindo de volta!</h2>
           <p className="text-center opacity-90 mb-8">
             Acesse sua conta para continuar de onde parou.
           </p>
-          
+
           <div className="w-full max-w-xs">
             <div className="flex items-center mb-4">
               <div className="flex-shrink-0 h-8 w-8 rounded-full bg-yellow-500  flex items-center justify-center mr-3">
@@ -79,14 +80,14 @@ export default function Login() {
         <div className="w-full md:w-1/2 p-12 flex flex-col justify-center">
           <h1 className="text-3xl font-bold text-gray-800 mb-2">Acesse sua conta</h1>
           <p className="text-gray-600 mb-8">Informe suas credenciais para continuar</p>
-          
+
           <form onSubmit={handleSubmit} className="space-y-6">
             {error && (
               <div className="p-3 bg-red-50 text-red-600 rounded-lg text-sm">
                 {error}
               </div>
             )}
-            
+
             <div className="space-y-1">
               <label htmlFor="email" className="block text-sm font-medium text-gray-700">
                 Email
@@ -108,7 +109,7 @@ export default function Login() {
                 </div>
               </div>
             </div>
-            
+
             <div className="space-y-1">
               <label htmlFor="password" className="block text-sm font-medium text-gray-700">
                 Senha
@@ -142,7 +143,7 @@ export default function Login() {
             >
               Entrar
             </button>
-            
+
             <div className="relative">
               <div className="absolute inset-0 flex items-center">
                 <div className="w-full border-t border-gray-300"></div>
@@ -160,8 +161,15 @@ export default function Login() {
               <FaGoogle className="mr-3 text-xl text-red-500" />
               Entrar com Google
             </button>
+            <div className="mt-4 flex justify-center">
+              <Link
+                className="inline-block bg-white text-blue-600 font-semibold px-4 py-2 rounded hover:bg-blue-100 transition-colors duration-200"
+                href="/">
+                Voltar para Tela Incial
+              </Link>
+            </div>
           </form>
-          
+
           <div className="mt-6 text-center">
             <p className="text-sm text-gray-600">
               Não tem uma conta?{' '}

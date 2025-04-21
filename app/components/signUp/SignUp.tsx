@@ -4,6 +4,7 @@ import { registerWithEmailAndPassword } from '@/app/config/authentication';
 import { useRouter } from 'next/navigation';
 import fg from '@/app/logo/LogoFG.svg';
 import Image from 'next/image';
+import Link from "next/link";
 
 export default function SignUp({ onSuccess }: { onSuccess?: () => void }) {
   const [name, setName] = useState('');
@@ -32,18 +33,18 @@ export default function SignUp({ onSuccess }: { onSuccess?: () => void }) {
         {/* Left Side - Logo and Welcome */}
         <div className="w-full md:w-1/2 bg-blue-600 p-12 flex flex-col items-center justify-center text-white">
           <div className="mb-8">
-            <Image 
-              src={fg} 
-              alt="Logo" 
-              width={200} 
+            <Image
+              src={fg}
+              alt="Logo"
+              width={200}
               height={200}
-              className="drop-shadow-lg"
+              className="filter brightness-0 invert"
             />
           </div>
           
           <h2 className="text-3xl font-bold mb-4 text-center">Bem-vindo à nossa plataforma!</h2>
           <p className="text-center opacity-90 mb-8">
-            Junte-se a nós e descubra todas as funcionalidades incríveis que preparamos para você.
+            Junte-se a nós!
           </p>
           
           <div className="w-full max-w-xs">
@@ -165,6 +166,16 @@ export default function SignUp({ onSuccess }: { onSuccess?: () => void }) {
             >
               Criar conta
             </button>
+
+            <div className="mt-4 flex justify-center">
+              <Link
+                className="inline-block bg-white text-blue-600 font-semibold px-4 py-2 rounded hover:bg-blue-100 transition-colors duration-200"
+                href="/">
+                Voltar para Tela Incial
+              </Link>
+            </div>
+
+
           </form>
           
           <div className="mt-6 text-center">
