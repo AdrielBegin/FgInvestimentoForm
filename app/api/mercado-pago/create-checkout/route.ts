@@ -4,17 +4,20 @@ import mpClient from "@/app/lib/mercado-pago";
 
 
 export async function POST(req: NextRequest) {
-  const { testeId, userEmail } = await req.json();
+  const { userEmail } = await req.json();
+
+  const externalReference = `order-${Date.now()}-${Math.random().toString(36).substring(2, 7)}`;
 
   try {
     const preference = new Preference(mpClient);
 
     const createdPreference = await preference.create({
       body: {
-        external_reference: testeId, // IMPORTANTE: Isso aumenta a pontuação da sua integração com o Mercado Pago - É o id da compra no nosso sistema
+        external_reference: externalReference, // IMPORTANTE: Isso aumenta a pontuação da sua integração com o Mercado Pago - É o id da compra no nosso sistema
+        
         metadata: {
-          testeId, // O Mercado Pago converte para snake_case, ou seja, testeId vai virar teste_id
-          // userEmail: userEmail,
+          // O Mercado Pago converte para snake_case, ou seja, testeId vai virar teste_id
+          userEmail: userEmail,
           // plan: '123'
           //etc
         },
@@ -32,28 +35,13 @@ export async function POST(req: NextRequest) {
             quantity: 1,
             unit_price: 2000,
             currency_id: "BRL",
-            category_id: "category", // Recomendado inserir, mesmo que não tenha categoria - Aumenta a pontuação da sua integração com o Mercado Pago
+            category_id: "education", // Recomendado inserir, mesmo que não tenha categoria - Aumenta a pontuação da sua integração com o Mercado Pago
           },
         ],
         payment_methods: {
-          // Descomente para desativar métodos de pagamento
-          //   excluded_payment_methods: [
-          //     {
-          //       id: "bolbradesco",
-          //     },
-          //     {
-          //       id: "pec",
-          //     },
-          //   ],
-          //   excluded_payment_types: [
-          //     {
-          //       id: "debit_card",
-          //     },
-          //     {
-          //       id: "credit_card",
-          //     },
-          //   ],
-          installments: 12, // Número máximo de parcelas permitidas - calculo feito automaticamente
+
+          installments: 12,
+
         },
         auto_return: "approved",
         back_urls: {
