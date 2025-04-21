@@ -1,6 +1,7 @@
 import "./globals.css";
 import React from "react";
-import '../app/config/firebaseClient';
+import { UserProvider } from "./components/providers/Providers";
+
 
 export default function RootLayout({
   children,
@@ -10,10 +11,14 @@ export default function RootLayout({
   return (
     <html lang="pt-BR">
       <head>
-        <title>School FG</title>        
+        <title>FG School</title>
         <meta name="description" content="Bem-vindo à school FG!" />
       </head>
-      <body className="bg-gray-100 text-gray-900">{children}</body>
+      <body className="bg-gray-50 text-gray-900">
+        <UserProvider>
+          {children}
+        </UserProvider>
+      </body>
     </html>
   );
 }

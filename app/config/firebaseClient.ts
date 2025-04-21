@@ -1,6 +1,7 @@
 import { initializeApp, getApps, getApp } from 'firebase/app';
 import { getAnalytics, isSupported } from 'firebase/analytics';
 import { getFirestore } from 'firebase/firestore';
+import { getAuth } from 'firebase/auth'; 
 
 export const firebaseConfig = {
   apiKey: process.env.NEXT_PUBLIC_FIREBASE_API_KEY_ID,
@@ -22,5 +23,9 @@ if (typeof window !== 'undefined') {
 }
 
 const db = getFirestore(app);
+const auth = getAuth(app);
+
+export { app,auth };
+
 
 export default db;
