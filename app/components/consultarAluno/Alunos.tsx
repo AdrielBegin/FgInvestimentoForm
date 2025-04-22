@@ -39,21 +39,21 @@ export default function ConsultaAlunos() {
   const [filtroStatus, setFiltroStatus] = useState('todos');
   const [mobileOpenId, setMobileOpenId] = useState<string | null>(null);
 
-  useEffect(() => {
-    carregarTodosAlunos();
-  }, []);
-
   // useEffect(() => {
-  //   if (!loading) {
-  //     const adminEmail = process.env.NEXT_PUBLIC_FIREBASE_ADM_EMAIL_ACCESS;
+  //   carregarTodosAlunos();
+  // }, []);
 
-  //     if (!user || user.email !== adminEmail) {        
-  //       router.push('/'); 
-  //     } else {
-  //       carregarTodosAlunos();
-  //     }
-  //   }
-  // }, [user, loading]);
+  useEffect(() => {
+    if (!loading) {
+      const adminEmail = process.env.NEXT_PUBLIC_FIREBASE_ADM_EMAIL_ACCESS;
+
+      if (!user || user.email !== adminEmail) {        
+        router.push('/'); 
+      } else {
+        carregarTodosAlunos();
+      }
+    }
+  }, [user, loading]);
 
 
   const carregarTodosAlunos = async () => {

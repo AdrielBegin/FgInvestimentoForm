@@ -1,7 +1,7 @@
 import Image from "next/image";
 import Link from "next/link";
 import { Roboto } from "next/font/google";
-import { FaInstagram, FaFacebook } from "react-icons/fa";
+import { FaInstagram, FaFacebook,FaWhatsapp } from "react-icons/fa";
 import { FaBookOpen, FaBitcoin, FaShieldAlt, FaChartLine, FaBullseye } from "react-icons/fa";
 import fg from '@/app/logo/LogoFG.svg';
 import quemSomos from '@/app/quemsomos.png'
@@ -119,11 +119,11 @@ export default function Home() {
             {/* Rodapé */}
             <footer className="bg-blue-700 py-8 px-6 text-center text-white mt-12">
                 <div className="flex justify-center gap-8 mb-4">
-                    <a href="https://instagram.com" target="_blank" rel="noopener noreferrer" aria-label="Instagram">
+                    <a href="https://www.instagram.com/fgs.investimentos/" target="_blank" rel="noopener noreferrer" aria-label="Instagram">
                         <FaInstagram className="text-3xl hover:text-yellow-400 transition" />
                     </a>
-                    <a href="https://facebook.com" target="_blank" rel="noopener noreferrer" aria-label="Facebook">
-                        <FaFacebook className="text-3xl hover:text-yellow-400 transition" />
+                    <a href="https://api.whatsapp.com/message/UAZIHRG25B5KP1?autoload=1&app_absent=0" target="_blank" rel="noopener noreferrer" aria-label="WhatsApp">
+                        <FaWhatsapp className="text-3xl hover:text-yellow-400 transition" />
                     </a>
                 </div>
                 <p className="text-sm opacity-80">© 2025 FG School. Todos os direitos reservados.</p>
