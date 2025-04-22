@@ -39,7 +39,8 @@ export default function FormularioMercadoPago() {
     cidade: '',
     modalidadeDeAula: '',
     dataCadastro: new Date().toLocaleString(),
-    status: true
+    statusPagemento: '',
+    profissao:''    
   });
 
   const modalidadeDeAulas = [
@@ -167,7 +168,7 @@ export default function FormularioMercadoPago() {
             <div className="bg-white/20 p-4 rounded-lg">
               <p className="text-sm opacity-90 mb-1">Investimento total</p>
               <p className="text-2xl font-bold">R$ 2.000,00</p>
-              <p className="text-xs opacity-80 mt-1">ou parcele em até 12x</p>
+              <p className="text-xs opacity-80 mt-1">ou parcele em até 12x com juros</p>
             </div>
           </div>
 
@@ -260,6 +261,20 @@ export default function FormularioMercadoPago() {
                     className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent transition-all"
                   />
                 </div>
+
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-1">
+                    Profissão
+                  </label>
+                  <input
+                    type="text"
+                    name="profissao"
+                    value={formData.profissao}
+                    onChange={handleChange}
+                    className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent transition-all"
+                  />
+                </div>
+
               </div>
 
               <div>
