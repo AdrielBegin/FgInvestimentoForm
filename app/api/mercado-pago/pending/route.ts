@@ -1,3 +1,4 @@
+// app/api/mercadopago-pending/route.js
 import { NextResponse } from "next/server";
 import { Payment } from "mercadopago";
 import mpClient from "@/app/lib/mercado-pago";

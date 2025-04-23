@@ -123,6 +123,7 @@ export default function FormularioMercadoPago() {
     createMercadoPagoCheckout({
       userId: formData.email,
       userEmail: formData.email,
+      name:formData.nome,
       productName: formData.curso,
       productPrice: formData.valor
     });

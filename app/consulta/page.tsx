@@ -6,7 +6,7 @@ import ConsultaAlunos from '@/app/components/consultarAluno/Alunos';
 export default function GetAlunos() {
   return (
     <div className="">
-      <ConsultaAlunos />
+      {/* <ConsultaAlunos /> */}
     </div>
   );
 }

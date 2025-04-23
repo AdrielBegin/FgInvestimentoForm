@@ -4,7 +4,7 @@ import mpClient from "@/app/lib/mercado-pago";
 
 
 export async function POST(req: NextRequest) {
-  const { userEmail } = await req.json();
+  const { userEmail,nameClient } = await req.json();
 
   const externalReference = `order-${Date.now()}-${Math.random().toString(36).substring(2, 7)}`;
 
@@ -24,6 +24,7 @@ export async function POST(req: NextRequest) {
         ...(userEmail && {
           payer: {
             email: userEmail,
+            name:nameClient
           },
         }),
 
