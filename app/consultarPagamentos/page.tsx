@@ -2,10 +2,12 @@
 
 import PagamentosConsulta from '@/app/components/consultarPagamento/PagamentosConsulta';
 
-export default function GetAlunos() {
+import TelaInicial from '@/app/components/paginaInicial/HomePag';
+
+export default function GetPagamento() {
   return (
     <div className="">
-      {/* <PagamentosConsulta /> */}
+      <TelaInicial />
     </div>
   );
 }
