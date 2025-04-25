@@ -43,7 +43,9 @@ export default function FormularioMercadoPago() {
     modalidadeDeAula: '',
     dataCadastro: new Date().toLocaleString(),
     statusPagemento: '',
-    profissao: ''
+    profissao: '',
+    logradouro: '',
+    numeroCasa: ''
   });
 
   const modalidadeDeAulas = [
@@ -97,6 +99,7 @@ export default function FormularioMercadoPago() {
           ...prev,
           estado: response.data.uf,
           cidade: response.data.localidade,
+          logradouro: response.data.logradouro,
         }));
       }
     }
@@ -294,6 +297,32 @@ export default function FormularioMercadoPago() {
 
                 <div>
                   <label className="block text-sm font-medium text-gray-700 mb-1">
+                    Logradouro
+                  </label>
+                  <input
+                    type="text"
+                    name="logradouro"
+                    value={formData.logradouro}
+                    onChange={handleChange}
+                    className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent transition-all"
+                  />
+                </div>
+
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-1">
+                    Numero da casa
+                  </label>
+                  <input
+                    type="text"
+                    name="numeroCasa"
+                    value={formData.numeroCasa}
+                    onChange={handleChange}
+                    className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent transition-all"
+                  />
+                </div>
+
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-1">
                     Profissão
                   </label>
                   <input
@@ -306,26 +335,26 @@ export default function FormularioMercadoPago() {
                   />
                 </div>
 
-              </div>
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-1">
+                    Como irá participar do curso
+                  </label>
+                  <select
+                    name="modalidadeDeAula"
+                    value={formData.modalidadeDeAula}
+                    onChange={handleChange}
+                    required
+                    className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent transition-all"
+                  >
+                    <option></option>
+                    {modalidadeDeAulas.map((aula) => (
+                      <option key={aula.value} value={aula.value}>
+                        {aula.label}
+                      </option>
+                    ))}
+                  </select>
+                </div>
 
-              <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">
-                  Como irá participar do curso
-                </label>
-                <select
-                  name="modalidadeDeAula"
-                  value={formData.modalidadeDeAula}
-                  onChange={handleChange}
-                  required
-                  className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent transition-all"
-                >
-                  <option></option>
-                  {modalidadeDeAulas.map((aula) => (
-                    <option key={aula.value} value={aula.value}>
-                      {aula.label}
-                    </option>
-                  ))}
-                </select>
               </div>
 
               <div>
