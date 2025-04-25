@@ -29,7 +29,6 @@ export default function FormularioMercadoPago() {
   }
 
   const { createMercadoPagoCheckout } = useMercadoPago();
-
   const [isSubmitting, setIsSubmitting] = useState(false);
 
   const [formData, setFormData] = useState({
