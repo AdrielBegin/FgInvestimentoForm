@@ -36,7 +36,7 @@ export default function FormularioMercadoPago() {
     nome: '',
     email: '',
     curso: 'Curso CADI - Carreira do Investidor',
-    valor: 1,
+    valor: 2000,
     cpfCnpj: '',
     cep: '',
     estado: '',
