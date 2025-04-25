@@ -6,6 +6,7 @@ import fg from '@/app/logo/LogoFG.svg'
 import axios from 'axios';
 import { UserContext } from "../providers/Providers";
 import { useRouter } from 'next/navigation';
+import { ToastContainer, toast } from 'react-toastify';
 
 export default function FormularioMercadoPago() {
 
@@ -28,6 +29,9 @@ export default function FormularioMercadoPago() {
   }
 
   const { createMercadoPagoCheckout } = useMercadoPago();
+
+  const [isSubmitting, setIsSubmitting] = useState(false);
+
   const [formData, setFormData] = useState({
     nome: '',
     email: '',
@@ -40,7 +44,7 @@ export default function FormularioMercadoPago() {
     modalidadeDeAula: '',
     dataCadastro: new Date().toLocaleString(),
     statusPagemento: '',
-    profissao:''    
+    profissao: ''
   });
 
   const modalidadeDeAulas = [
@@ -117,16 +121,42 @@ export default function FormularioMercadoPago() {
   };
 
   const handleSubmit = async (e: any) => {
-    e.preventDefault();
-    await saveToFirebase();
 
-    createMercadoPagoCheckout({
-      userId: formData.email,
-      userEmail: formData.email,
-      name:formData.nome,
-      productName: formData.curso,
-      productPrice: formData.valor
-    });
+    e.preventDefault();
+
+    setIsSubmitting(true);
+
+    try {
+
+      toast.info('Processando sua inscrição...', {
+        autoClose: false,
+        toastId: 'submitting'
+      });
+
+      await saveToFirebase();
+
+      await createMercadoPagoCheckout({
+        userId: formData.email,
+        userEmail: formData.email,
+        name: formData.nome,
+        productName: formData.curso,
+        productPrice: formData.valor
+      });
+
+      toast.dismiss('submitting');
+
+      toast.success('Redirecionando para o pagamento!');
+
+    } catch (error) {
+
+      toast.dismiss('submitting');
+      toast.error('Ocorreu um erro ao processar sua inscrição. Tente novamente.');
+      console.error(error);
+    } finally {
+
+      setIsSubmitting(false);
+    }
+
   };
 
   return (
@@ -323,9 +353,19 @@ export default function FormularioMercadoPago() {
 
               <button
                 type="submit"
-                className="w-full py-3 px-4 bg-yellow-500 hover:from-green-700 hover:to-yello-950 text-blue font-medium rounded-lg shadow-md hover:shadow-lg transition-all duration-300 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500"
+                disabled={isSubmitting}
+                className={`w-full py-3 px-4 bg-yellow-500 hover:from-green-700 hover:to-yello-950 text-blue font-medium rounded-lg shadow-md hover:shadow-lg transition-all duration-300 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500 
+                  ${isSubmitting ? 'opacity-70 cursor-not-allowed flex justify-center items-center' :
+                    ''}`}
               >
-                Finalizar Inscrição
+                {isSubmitting ? (
+                  <>
+                    Processando...
+                  </>
+                ) : (
+                  'Finalizar Inscrição'
+                )}
+
               </button>
             </form>
           </div>
