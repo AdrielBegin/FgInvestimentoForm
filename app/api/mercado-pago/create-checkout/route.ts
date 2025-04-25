@@ -34,7 +34,7 @@ export async function POST(req: NextRequest) {
             description: "é uma carreira, onde a pessoa se torna um investidor no mercado de criptomoedas, tendo acesso a um método FG School com um material 100% apostilado, operações práticas em criptomoedas, margem de risco, teitura de gráfico, posicionamento de indicadores e como usar. tudo isso você faz parte do curso CADI onde você se torna e constrói sua carreira de investidor.",
             title: "Curso CADI - Carreira do Investidor",
             quantity: 1,
-            unit_price: 1,
+            unit_price: 2000,
             currency_id: "BRL",
             category_id: "education", // Recomendado inserir, mesmo que não tenha categoria - Aumenta a pontuação da sua integração com o Mercado Pago
           },
