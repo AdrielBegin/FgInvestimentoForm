@@ -6,7 +6,7 @@ import fg from '@/app/logo/LogoFG.svg'
 import axios from 'axios';
 import { UserContext } from "../providers/Providers";
 import { useRouter } from 'next/navigation';
-import { ToastContainer, toast } from 'react-toastify';
+import { toast } from 'react-toastify';
 
 export default function FormularioMercadoPago() {
 
@@ -36,7 +36,7 @@ export default function FormularioMercadoPago() {
     nome: '',
     email: '',
     curso: 'Curso CADI - Carreira do Investidor',
-    valor: 2000,
+    valor: 1,
     cpfCnpj: '',
     cep: '',
     estado: '',
