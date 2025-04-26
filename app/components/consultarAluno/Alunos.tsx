@@ -102,7 +102,7 @@ export default function ConsultaAlunos() {
     // Cria a worksheet e o workbook
     const worksheet = XLSX.utils.json_to_sheet(dataToExport);
     const workbook = XLSX.utils.book_new();
-    XLSX.utils.book_append_sheet(workbook, worksheet, "Alunos");
+    XLSX.utils.book_append_sheet(workbook, worksheet, "alunos");
 
     // Exporta o arquivo
     XLSX.writeFile(workbook, "alunos.xlsx");
