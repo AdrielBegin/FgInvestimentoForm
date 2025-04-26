@@ -1,21 +1,12 @@
 'use client';
-
 import PagamentosConsulta from '@/app/components/consultarPagamento/PagamentosConsulta';
+import ProtectedRoute from '../components/protectedRoute/ProtectedRoute';
 
-import TelaInicial from '@/app/components/paginaInicial/HomePag';
 
-import dynamic from 'next/dynamic';
-
-const ProtectedRoute = dynamic(
-  () => import('../components/protectedRoute/ProtectedRoute'),
-  { ssr: false }
-);
-
-export default function GetPagamento() {
+export default function GetPagamentos() {
   return (    
     <ProtectedRoute requiredRole='admin'>
       <PagamentosConsulta />
-    </ProtectedRoute>
-    
+    </ProtectedRoute>    
   );
 }

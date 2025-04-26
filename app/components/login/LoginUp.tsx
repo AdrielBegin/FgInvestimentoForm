@@ -1,6 +1,10 @@
 'use client';
-import { useState } from 'react';
-import { loginWithEmailAndPassword, signWithGoogle } from '@/app/config/authentication';
+import { use, useState } from 'react';
+import {
+  loginWithEmailAndPassword,
+  signWithGoogle,
+  getUserRole
+} from '@/app/config/authentication';
 import { useRouter } from 'next/navigation';
 import { FaGoogle } from 'react-icons/fa';
 import fg from '@/app/logo/LogoFG.svg';
@@ -16,9 +20,20 @@ export default function Login() {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setError('');
+
     try {
-      await loginWithEmailAndPassword(email, password);
-      router.push('/formularioMercadoPago');
+      const user = await loginWithEmailAndPassword(email, password);
+
+      const userRole = await getUserRole(user.uid);
+
+      if (user) {
+        if (userRole === "admin") {
+          router.push('/telaAdmin');
+        } else {
+          router.push('/formularioMercadoPago');
+        }
+      }
+
     } catch (err) {
       setError('Falha no login. Verifique suas credenciais.');
       console.error(err);
@@ -37,9 +52,8 @@ export default function Login() {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-green-50 to-blue-50 flex items-center justify-center p-4">
-      <div className="max-w-6xl w-full bg-white rounded-2xl shadow-xl overflow-hidden flex flex-col md:flex-row">
-        {/* Left Side - Logo and Welcome */}
+    <div className="min-h-screen flex items-center justify-center p-4">
+      <div className="max-w-6xl w-full bg-white rounded-2xl shadow-xl overflow-hidden flex flex-col md:flex-row">        
         <div className="w-full md:w-1/2 bg-blue-600 p-12 flex flex-col items-center justify-center text-white">
           <div className="mb-8">
             <Image
@@ -75,8 +89,6 @@ export default function Login() {
             </div>
           </div>
         </div>
-
-        {/* Right Side - Form */}
         <div className="w-full md:w-1/2 p-12 flex flex-col justify-center">
           <h1 className="text-3xl font-bold text-gray-800 mb-2">Acesse sua conta</h1>
           <p className="text-gray-600 mb-8">Informe suas credenciais para continuar</p>

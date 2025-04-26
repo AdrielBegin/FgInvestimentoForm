@@ -5,6 +5,7 @@ import { collection, query, where, getDocs } from 'firebase/firestore';
 import { UserContext } from '@/app/components/providers/Providers';
 import { useRouter } from 'next/navigation';
 import Link from "next/link";
+import * as XLSX from 'xlsx';
 import {
   FiSearch,
   FiUser,
@@ -14,7 +15,9 @@ import {
   FiRefreshCw,
   FiChevronDown,
   FiChevronUp,
-  FiBook
+  FiBook,
+  FiDownload
+
 } from 'react-icons/fi';
 
 type Aluno = {
@@ -42,19 +45,6 @@ export default function ConsultaAlunos() {
   useEffect(() => {
     carregarTodosAlunos();
   }, []);
-
-  // useEffect(() => {
-  //   if (!loading) {
-  //     const adminEmail = process.env.NEXT_PUBLIC_FIREBASE_ADM_EMAIL_ACCESS;
-
-  //     if (!user || user.email !== adminEmail) {        
-  //       router.push('/'); 
-  //     } else {
-  //       carregarTodosAlunos();
-  //     }
-  //   }
-  // }, [user, loading]);
-
 
   const carregarTodosAlunos = async () => {
     setCarregando(true);
@@ -96,6 +86,26 @@ export default function ConsultaAlunos() {
 
     setAlunos(resultados);
     setCarregando(false);
+  };
+  const handleExportExcel = () => {
+    // Configura os dados para exportar
+    const dataToExport = alunos.map(aluno => ({
+      Nome: aluno.nome,
+      Email: aluno.email,
+      Cidade: aluno.cidade,
+      CpfCnpj: aluno.cpfCnpj,
+      DataCadastro: aluno.dataCadastro,
+      Status: aluno.status,
+      ModalidadeDeAula: aluno.modalidadeDeAula,
+    }));
+
+    // Cria a worksheet e o workbook
+    const worksheet = XLSX.utils.json_to_sheet(dataToExport);
+    const workbook = XLSX.utils.book_new();
+    XLSX.utils.book_append_sheet(workbook, worksheet, "Alunos");
+
+    // Exporta o arquivo
+    XLSX.writeFile(workbook, "alunos.xlsx");
   };
 
   const alunosFiltrados = filtroStatus === 'todos'
@@ -169,6 +179,14 @@ export default function ConsultaAlunos() {
                     <FiRefreshCw className="hidden sm:inline" />
                     <span className="text-sm sm:text-base">Recarregar</span>
                   </button>
+                  <button
+                    onClick={handleExportExcel}
+                    className="flex-1 bg-yellow-600 hover:bg-yellow-700 text-white px-4 py-2 rounded-lg flex items-center justify-center gap-2 transition-colors"
+                  >
+                    <FiDownload />
+                    Exportar Excel
+                  </button>
+
                 </div>
               </div>
             </div>

@@ -69,30 +69,28 @@ const loginWithEmailAndPassword = async (email: string, pwd: string) => {
     }
 }
 
-// Verificar o papel do usuário atual
 const getUserRole = async (userId: string): Promise<string> => {
-    try {
-        const userDoc = await getDoc(doc(db, 'users', userId));
+    try {       
+        const userDoc = await getDoc(doc(db, 'users', userId));       
+
         if (userDoc.exists()) {
-            return userDoc.data().role || 'user';
+            const userData = userDoc.data();
+            return userData.role || 'user';
         }
-        return 'user'; // Padrão se não encontrado
+        return 'user'; 
     } catch (error) {
         console.error("Erro ao verificar papel do usuário:", error);
-        return 'user'; // Por segurança, retorna papel básico em caso de erro
+        return 'user'; 
     }
 }
 
-// Verificar se o usuário é administrador
 const isAdmin = async (userId: string): Promise<boolean> => {
     const role = await getUserRole(userId);
     return role === 'admin';
 }
 
-// Atualizar papel do usuário (somente admins devem poder executar isto)
 const updateUserRole = async (targetUserId: string, newRole: 'user' | 'admin') => {
-    try {
-        // Verificar se o usuário atual é admin (em um ambiente real, você deve verificar isso)
+    try {        
         const currentUser = auth.currentUser;
         if (!currentUser) {
             throw new Error('Nenhum usuário autenticado');
@@ -102,8 +100,7 @@ const updateUserRole = async (targetUserId: string, newRole: 'user' | 'admin') =
         if (!isCurrentUserAdmin) {
             throw new Error('Permissão negada: apenas administradores podem alterar papéis');
         }
-
-        // Atualizar o papel
+        
         await setDoc(doc(db, 'users', targetUserId), { role: newRole }, { merge: true });
         return true;
     } catch (error) {
@@ -130,29 +127,28 @@ const signWithGoogle = async () => {
     try {
         const res = await signInWithPopup(auth, googleProvider);
         const user = res.user;
-
-        // Verificar se o usuário já existe
+        
         const userDoc = await getDoc(doc(db, 'users', user.uid));
 
-        if (!userDoc.exists()) {
-            // Se não existir, criar com papel 'user'
+        if (!userDoc.exists()) {            
             await setDoc(doc(db, 'users', user.uid), {
                 uid: user.uid,
                 name: user.displayName,
                 authProvider: "google",
                 email: user.email,
-                role: 'user'
+                role: 'user',
+                createdAt: new Date().toISOString()
             });
         }
 
         return user;
     } catch (error) {
         console.error("Erro ao fazer login com Google:", error);
+        await auth.signOut();
         throw error;
     }
 }
 
-// Hook para monitorar estado de autenticação
 const useAuth = (callback: (user: User | null) => void) => {
     onAuthStateChanged(auth, (user) => {
         callback(user);

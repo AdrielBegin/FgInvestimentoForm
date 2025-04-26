@@ -3,7 +3,9 @@
 
 import React, { useState, useEffect } from "react";
 import axios from "axios";
-import { FaSearch, FaSpinner, FaFileDownload } from "react-icons/fa";
+import { FaSearch, FaSpinner } from "react-icons/fa";
+import {FiDownload} from "react-icons/fi";
+import * as XLSX from "xlsx";
 
 interface Pagamento {
     id: string;
@@ -121,40 +123,30 @@ export default function PagamentosConsulta() {
             });
         }
     };
-
-    const exportarCSV = () => {
+    const exportarXLSX = () => {
         if (pagamentos.length === 0) return;
 
-        const cabecalhos = ["ID", "Data de Criação", "Status Pagamento", "Método", "Valor", "Email", "Referência"];
+        // Organizando os dados para exportação
+        const dataToExport = pagamentos.map((pagamento) => ({
+            "ID": pagamento.id,
+            "Data de Criação": new Date(pagamento.date_created).toLocaleString("pt-BR"),
+            "Data de Aprovação": pagamento.date_approved ? new Date(pagamento.date_approved).toLocaleString("pt-BR") : "-",
+            "Status Pagamento": traduzirStatus(pagamento.status),
+            "Método": traduzirMetodo(pagamento.payment_method_id),
+            "Valor": pagamento.transaction_amount.toLocaleString("pt-BR", { style: "currency", currency: "BRL" }),
+            "Payer Email": pagamento.payer.email,
+            "Referência": pagamento.external_reference || "-",
+        }));
 
-        const linhas = pagamentos.map(p => [
-            p.id,
-            new Date(p.date_created).toLocaleString('pt-BR'),
-            traduzirStatus(p.status),
-            traduzirMetodo(p.payment_method_id),
-            p.transaction_amount.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' }),
-            p.payer.email,
-            p.external_reference || "",
-        ]);
+        // Criando a planilha
+        const worksheet = XLSX.utils.json_to_sheet(dataToExport);
+        const workbook = XLSX.utils.book_new();
+        XLSX.utils.book_append_sheet(workbook, worksheet, "Pagamentos");
 
-        const csvContent = [
-            cabecalhos.join(","),
-            ...linhas.map(r => r.join(","))
-        ].join("\n");
-
-        const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
-        const link = document.createElement("a");
-        const url = URL.createObjectURL(blob);
-
-        link.setAttribute("href", url);
-        link.setAttribute("download", `pagamentos_${new Date().toISOString().slice(0, 10)}.csv`);
-        link.style.visibility = 'hidden';
-
-        document.body.appendChild(link);
-        link.click();
-        document.body.removeChild(link);
+        // Exportando o arquivo .xlsx
+        XLSX.writeFile(workbook, `pagamentos_${new Date().toISOString().slice(0, 10)}.xlsx`);
     };
-
+   
     const traduzirStatus = (status: string): string => {
         const statusMap: Record<string, string> = {
             approved: "Aprovado",
@@ -238,12 +230,12 @@ export default function PagamentosConsulta() {
                         </button>
 
                         <button
-                            onClick={exportarCSV}
+                            onClick={exportarXLSX}
                             className="flex items-center justify-center ml-2 px-4 py-2 bg-green-600 text-white rounded-md hover:bg-green-700"
                             disabled={pagamentos.length === 0 || carregando}
                         >
-                            <FaFileDownload className="mr-2" />
-                            Exportar
+                            <FiDownload className="mr-2" />
+                            Exportar XLSX
                         </button>
                     </div>
                 </div>

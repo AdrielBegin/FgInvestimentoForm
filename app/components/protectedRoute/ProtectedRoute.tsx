@@ -1,6 +1,6 @@
-// components/ProtectedRoute.tsx
 'use client';
-import { useRouter } from 'next/router';
+
+import { useRouter } from 'next/navigation'; // Use a API de navegação moderna do App Router
 import { useEffect, useState } from 'react';
 import { auth, getUserRole } from '@/app/config/authentication';
 
@@ -12,28 +12,30 @@ interface ProtectedRouteProps {
 const ProtectedRoute = ({ children, requiredRole = 'user' }: ProtectedRouteProps) => {
   const router = useRouter();
   const [loading, setLoading] = useState(true);
+  const [authorized, setAuthorized] = useState(false);
 
   useEffect(() => {
     const checkAuth = async () => {
       const unsubscribe = auth.onAuthStateChanged(async (user) => {
         if (!user) {
-          // Usuário não autenticado, redirecionar para login
           router.push('/login');
           return;
         }
 
-        if (requiredRole === 'admin') {
-          // Verificar se o usuário tem papel de admin
+        try {
           const role = await getUserRole(user.uid);
-          if (role !== 'admin') {
-            // Não é admin, redirecionar para página não autorizada
-            router.push('/nao-autorizado');
+          if (requiredRole === 'admin' && role !== 'admin') {
+            router.push('/');
             return;
           }
-        }
 
-        // Usuário autenticado e com permissões corretas
-        setLoading(false);
+          setAuthorized(true);
+        } catch (err) {
+          console.error('Erro ao verificar role:', err);
+          router.push('/');
+        } finally {
+          setLoading(false);
+        }
       });
 
       return () => unsubscribe();
@@ -44,6 +46,10 @@ const ProtectedRoute = ({ children, requiredRole = 'user' }: ProtectedRouteProps
 
   if (loading) {
     return <div>Carregando...</div>;
+  }
+
+  if (!authorized) {
+    return null;
   }
 
   return <>{children}</>;
