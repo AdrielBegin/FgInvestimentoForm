@@ -1,14 +1,16 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useEffect, useState, useContext } from 'react';
 import Head from 'next/head';
 import Image from 'next/image';
 import { Roboto } from "next/font/google";
 import ConsultaAlunos from '@/app/components/consultarAluno/Alunos';
 import ConsultaPagamentos from '@/app/components/consultarPagamento/PagamentosConsulta';
 import fg from '@/app/logo/FgSemFundo.png';
+import { UserContext } from '@/app/components/providers/Providers'; 
+import { useRouter } from 'next/navigation';
 
-// Configurando a fonte Roboto
+
 const roboto = Roboto({
     weight: ["400", "700"],
     subsets: ["latin"],
@@ -17,10 +19,32 @@ const roboto = Roboto({
 });
 
 export default function TelaAdmin() {
+    const { user, loading } = useContext(UserContext);
+    const router = useRouter();
+
     const [activeTab, setActiveTab] = useState('alunos');
     const [showHeader, setShowHeader] = useState(true);
     const [lastScrollY, setLastScrollY] = useState(0);
 
+    console.log("user", user);
+    
+    
+    useEffect(() => {
+        if (loading) {
+            return; 
+        }
+
+        if (!user) {
+            router.push('/login');
+            return;
+        }
+
+        if (user.role !== 'admin') {
+            router.push('/login');
+            return;
+        }
+    }, [user, loading, router]);
+    
     useEffect(() => {
         const handleScroll = () => {
             const currentScrollY = window.scrollY;
@@ -39,6 +63,14 @@ export default function TelaAdmin() {
             window.removeEventListener('scroll', handleScroll);
         };
     }, [lastScrollY]);
+    
+    if (loading || !user) {
+        return (
+            <div className="min-h-screen flex items-center justify-center">
+                <p>Carregando...</p>
+            </div>
+        );
+    }
 
     return (
         <>
@@ -51,8 +83,9 @@ export default function TelaAdmin() {
 
             <div className={`${roboto.className} font-sans text-gray-800 bg-gray-50`}>
                 <header
-                    className={`w-full bg-blue-600 py-3 px-6 sticky top-0 z-50 shadow-md flex justify-between items-center transition-transform duration-300 ${showHeader ? 'translate-y-0' : '-translate-y-full'
-                        }`}
+                    className={`w-full bg-blue-600 py-3 px-6 sticky top-0 z-50 shadow-md flex justify-between items-center transition-transform duration-300 ${
+                        showHeader ? 'translate-y-0' : '-translate-y-full'
+                    }`}
                 >
                     <Image
                         src={fg}
@@ -65,15 +98,17 @@ export default function TelaAdmin() {
                     <nav className="flex gap-4 items-center">
                         <button
                             onClick={() => setActiveTab('alunos')}
-                            className={`px-4 py-2 rounded-md transition-colors duration-300 ${activeTab === 'alunos' ? 'bg-white text-blue-600' : 'bg-blue-500 text-white hover:bg-blue-400'
-                                }`}
+                            className={`px-4 py-2 rounded-md transition-colors duration-300 ${
+                                activeTab === 'alunos' ? 'bg-white text-blue-600' : 'bg-blue-500 text-white hover:bg-blue-400'
+                            }`}
                         >
                             Consultar Alunos
                         </button>
                         <button
                             onClick={() => setActiveTab('pagamentos')}
-                            className={`px-4 py-2 rounded-md transition-colors duration-300 ${activeTab === 'pagamentos' ? 'bg-white text-blue-600' : 'bg-blue-500 text-white hover:bg-blue-400'
-                                }`}
+                            className={`px-4 py-2 rounded-md transition-colors duration-300 ${
+                                activeTab === 'pagamentos' ? 'bg-white text-blue-600' : 'bg-blue-500 text-white hover:bg-blue-400'
+                            }`}
                         >
                             Consultar Pagamentos
                         </button>
