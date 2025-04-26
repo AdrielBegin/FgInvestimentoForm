@@ -25,15 +25,8 @@ export default function TelaAdmin() {
     const [activeTab, setActiveTab] = useState('alunos');
     const [showHeader, setShowHeader] = useState(true);
     const [lastScrollY, setLastScrollY] = useState(0);
-
-    console.log("user", user);
-    
-    
-    useEffect(() => {
-        if (loading) {
-            return; 
-        }
-
+       
+    useEffect(() => {        
         if (!user) {
             router.push('/login');
             return;
