@@ -48,7 +48,7 @@ export default function ConsultaAlunos() {
 
   const carregarTodosAlunos = async () => {
     setCarregando(true);
-    const alunosRef = collection(db, 'Alunos');
+    const alunosRef = collection(db, 'alunos');
     const querySnapshot = await getDocs(alunosRef);
 
     const resultados = querySnapshot.docs.map(doc => ({
