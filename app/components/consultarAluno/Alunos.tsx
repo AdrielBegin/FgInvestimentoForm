@@ -24,7 +24,12 @@ type Aluno = {
   id: string;
   nome: string;
   email: string;
-  cidade: string;
+  cidade: string;  
+  cep: string;
+  estado: string;
+  logradouro: string;
+  numeroCasa: string;
+  profissao: string;
   cpfCnpj: string;
   dataCadastro?: string;
   status?: string;
@@ -54,6 +59,7 @@ export default function ConsultaAlunos() {
     const resultados = querySnapshot.docs.map(doc => ({
       id: doc.id,
       ...(doc.data() as Omit<Aluno, 'id'>),
+      modalidadeDeAula: doc.data().modalidadeDeAula || "Não informado", 
       dataCadastro: new Date(doc.data().timestamp?.toDate()).toLocaleDateString(),
       status: ['Ativo', 'Inativo', 'Pendente'][Math.floor(Math.random() * 3)]
     }));
@@ -69,7 +75,7 @@ export default function ConsultaAlunos() {
     }
 
     setCarregando(true);
-    const alunosRef = collection(db, 'Alunos');
+    const alunosRef = collection(db, 'alunos');
 
     const campo = /^\d+$/.test(busca) ? 'cpfCnpj' : 'nome';
 
@@ -92,9 +98,13 @@ export default function ConsultaAlunos() {
     const dataToExport = alunos.map(aluno => ({
       Nome: aluno.nome,
       Email: aluno.email,
-      Cidade: aluno.cidade,
       CpfCnpj: aluno.cpfCnpj,
-      DataCadastro: aluno.dataCadastro,
+      CEP: aluno.cep,
+      Cidade: aluno.cidade,
+      Estado: aluno.estado,
+      Logradouro: aluno.logradouro,
+      DataCadastro: aluno.dataCadastro,      
+      ModelidadeAula: aluno.modalidadeDeAula,      
       Status: aluno.status,
       ModalidadeDeAula: aluno.modalidadeDeAula,
     }));
@@ -191,8 +201,6 @@ export default function ConsultaAlunos() {
               </div>
             </div>
           </div>
-
-          {/* Data Grid */}
           <div className="overflow-x-auto">
             {carregando ? (
               <div className="p-8 flex justify-center">
@@ -214,15 +222,33 @@ export default function ConsultaAlunos() {
                         </th>
                         <th scope="col" className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                           Contato
+                        </th>                        
+                        <th scope="col" className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                          Profissão
                         </th>
                         <th scope="col" className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                          Localização
+                          CEP
+                        </th>
+                        <th scope="col" className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                          Estado
+                        </th>                        
+                        <th scope="col" className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                          Cidade
+                        </th>
+                        <th scope="col" className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                          Lougradouro
+                        </th>                        
+                        <th scope="col" className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                          Numero da Casa
                         </th>
                         <th scope="col" className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                           CPF/CNPJ
                         </th>
                         <th scope="col" className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                           Modalidade de Aula
+                        </th>
+                        <th scope="col" className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                          Data de Cadastro
                         </th>
                         <th scope="col" className="hidden px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider" >
                           Status
@@ -252,23 +278,66 @@ export default function ConsultaAlunos() {
                               {aluno.email}
                             </div>
                           </td>
+                          
+                          <td className="px-4 py-4 whitespace-nowrap">
+                            <div className="flex items-center text-sm text-gray-900">
+                              <FiMapPin className="mr-2 text-gray-400" />
+                              {aluno.profissao}
+                            </div>
+                          </td>
+
+                          <td className="px-4 py-4 whitespace-nowrap">
+                            <div className="flex items-center text-sm text-gray-900">
+                              <FiMapPin className="mr-2 text-gray-400" />
+                              {aluno.cep}
+                            </div>
+                          </td>
+
+                          <td className="px-4 py-4 whitespace-nowrap">
+                            <div className="flex items-center text-sm text-gray-900">
+                              <FiMapPin className="mr-2 text-gray-400" />
+                              {aluno.estado}
+                            </div>
+                          </td>
+
                           <td className="px-4 py-4 whitespace-nowrap">
                             <div className="flex items-center text-sm text-gray-900">
                               <FiMapPin className="mr-2 text-gray-400" />
                               {aluno.cidade}
                             </div>
                           </td>
-                          <td className="px-4 py-4 whitespace-nowrap text-sm text-gray-500">
-                            <div className="flex items-center">
-                              <FiFileText className="mr-2 text-gray-400" />
-                              {aluno.cpfCnpj}
+
+                          <td className="px-4 py-4 whitespace-nowrap">
+                            <div className="flex items-center text-sm text-gray-900">
+                              <FiMapPin className="mr-2 text-gray-400" />
+                              {aluno.logradouro}
                             </div>
                           </td>
 
                           <td className="px-4 py-4 whitespace-nowrap text-sm text-gray-500">
-                            <div className="flex items-center min-w-[120px]">  {/* Adicionei min-width */}
-                              <FiBook className="mr-2 text-gray-400" />  {/* Ícone mais apropriado */}
-                              <span className="truncate">{aluno.modalidadeDeAula}</span>  {/* Evita overflow */}
+                            <div className="flex items-center">
+                              <FiFileText className="mr-2 text-gray-400" />
+                              {aluno.numeroCasa}
+                            </div>
+                          </td>
+
+                          <td className="px-4 py-4 whitespace-nowrap text-sm text-gray-500">
+                            <div className="flex items-center min-w-[120px]"> 
+                              <FiBook className="mr-2 text-gray-400" /> 
+                              <span className="truncate">{aluno.cpfCnpj}</span> 
+                            </div>
+                          </td>
+                          <td className="px-4 py-4 whitespace-nowrap text-sm text-gray-500">
+                            <div className="flex items-center min-w-[120px]"> 
+                              <FiBook className="mr-2 text-gray-400" /> 
+                              <span className="truncate">{aluno.modalidadeDeAula}</span> 
+                            </div>
+                          </td>
+
+                          <td className="px-4 py-4 whitespace-nowrap text-sm text-gray-500">
+                            <div className="flex items-center min-w-[120px]"> 
+                              <FiBook className="mr-2 text-gray-400" /> 
+                              <span className="truncate">{aluno.dataCadastro}</span> 
                             </div>
                           </td>
 
