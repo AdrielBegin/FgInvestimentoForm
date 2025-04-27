@@ -143,9 +143,9 @@ export default function Login() {
                 </div>
               </div>
               <div className="flex justify-end mt-1">
-                <a href="#" className="text-sm text-green-600 hover:text-green-500">
+                {/* <a href="#" className="text-sm text-green-600 hover:text-green-500">
                   Esqueceu sua senha?
-                </a>
+                </a> */}
               </div>
             </div>
 
