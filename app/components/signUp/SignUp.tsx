@@ -13,8 +13,7 @@ export default function SignUp({ onSuccess }: { onSuccess?: () => void }) {
   const [error, setError] = useState('');
   const router = useRouter();
 
-  const handleSubmit = async (e: React.FormEvent) => {
-    console.log("Iniciando cadastro", email, name, password);
+  const handleSubmit = async (e: React.FormEvent) => {    
     e.preventDefault();
     setError('');
     try {
