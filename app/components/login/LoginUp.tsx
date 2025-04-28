@@ -10,30 +10,58 @@ import { FaGoogle } from 'react-icons/fa';
 import fg from '@/app/logo/LogoFG.svg';
 import Image from 'next/image';
 import Link from "next/link";
+import { collection, query, where, getDocs } from 'firebase/firestore';
+import db from "@/app/config/firebaseClient";
+import useMercadoPago from "@/app/hooks/useMercadoPago";
 
 export default function Login() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
   const router = useRouter();
+  const { createMercadoPagoCheckout } = useMercadoPago();
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setError('');
 
     try {
-      const user = await loginWithEmailAndPassword(email, password);
+      
+      const alunosRef = collection(db, 'alunos');
+      const q = query(alunosRef, where("email", "==", email));
+      const querySnapshot = await getDocs(q);
 
-      const userRole = await getUserRole(user.uid);
-
-      if (user) {
-        if (userRole === "admin") {
-          router.push('/telaAdmin');
-        } else {
-          router.push('/formularioMercadoPago');
+      if (!querySnapshot.empty) {
+        const formData = {
+          userId: querySnapshot.docs[0].data().uid,
+          email: email,
+          nome: querySnapshot.docs[0].data().nome,
+          curso: querySnapshot.docs[0].data().curso,
+          valor: querySnapshot.docs[0].data().valor
         }
-      }
 
+        await createMercadoPagoCheckout({
+          userId: formData.userId || formData.email,
+          userEmail: formData.email,
+          name: formData.nome,
+          productName: formData.curso,
+          productPrice: formData.valor
+        });
+
+      } else {
+
+        const user = await loginWithEmailAndPassword(email, password);
+        const userRole = await getUserRole(user.uid);
+
+        if (user) {
+          if (userRole === "admin") {
+            router.push('/telaAdmin');
+          } else {
+            router.push('/formularioMercadoPago');
+          }
+        }
+
+      }
     } catch (err) {
       setError('Falha no login. Verifique suas credenciais.');
       console.error(err);
@@ -53,7 +81,7 @@ export default function Login() {
 
   return (
     <div className="min-h-screen flex items-center justify-center p-4">
-      <div className="max-w-6xl w-full bg-white rounded-2xl shadow-xl overflow-hidden flex flex-col md:flex-row">        
+      <div className="max-w-6xl w-full bg-white rounded-2xl shadow-xl overflow-hidden flex flex-col md:flex-row">
         <div className="w-full md:w-1/2 bg-blue-600 p-12 flex flex-col items-center justify-center text-white">
           <div className="mb-8">
             <Image

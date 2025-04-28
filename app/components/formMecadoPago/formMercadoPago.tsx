@@ -7,6 +7,7 @@ import axios from 'axios';
 import { UserContext } from "../providers/Providers";
 import { useRouter } from 'next/navigation';
 import { toast } from 'react-toastify';
+import { v4 as uuidv4 } from 'uuid';
 
 export default function FormularioMercadoPago() {
 
@@ -32,6 +33,7 @@ export default function FormularioMercadoPago() {
   const [isSubmitting, setIsSubmitting] = useState(false);
 
   const [formData, setFormData] = useState({
+    id: uuidv4(),
     nome: '',
     email: '',
     curso: 'Curso CADI - Carreira do Investidor',
