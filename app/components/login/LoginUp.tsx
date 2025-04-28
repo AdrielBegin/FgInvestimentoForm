@@ -184,7 +184,7 @@ export default function Login() {
               Entrar
             </button>
 
-            <div className="relative">
+            {/* <div className="relative">
               <div className="absolute inset-0 flex items-center">
                 <div className="w-full border-t border-gray-300"></div>
               </div>
@@ -200,7 +200,8 @@ export default function Login() {
             >
               <FaGoogle className="mr-3 text-xl text-red-500" />
               Entrar com Google
-            </button>
+            </button> */}
+
             <div className="mt-4 flex justify-center">
               <Link
                 className="inline-block bg-white text-blue-600 font-semibold px-4 py-2 rounded hover:bg-blue-100 transition-colors duration-200"
