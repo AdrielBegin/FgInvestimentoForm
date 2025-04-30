@@ -60,8 +60,6 @@ export default function ConsultaAlunos() {
       id: doc.id,
       ...(doc.data() as Omit<Aluno, 'id'>),
       modalidadeDeAula: doc.data().modalidadeDeAula || "Não informado",
-      // dataCadastro: new Date(doc.data().timestamp?.toDate()).toLocaleDateString(),
-      // dataCadastro: doc.data().dataCadastro.toDate().toLocaleDateString("pt-BR"),
       dataCadastro: parseDataHoraPtBr(doc.data().dataCadastro),
       status: ['Ativo', 'Inativo', 'Pendente'][Math.floor(Math.random() * 3)]
     }));
