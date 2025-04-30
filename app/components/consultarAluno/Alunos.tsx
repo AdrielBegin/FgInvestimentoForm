@@ -24,7 +24,7 @@ type Aluno = {
   id: string;
   nome: string;
   email: string;
-  cidade: string;  
+  cidade: string;
   cep: string;
   estado: string;
   logradouro: string;
@@ -59,13 +59,33 @@ export default function ConsultaAlunos() {
     const resultados = querySnapshot.docs.map(doc => ({
       id: doc.id,
       ...(doc.data() as Omit<Aluno, 'id'>),
-      modalidadeDeAula: doc.data().modalidadeDeAula || "Não informado", 
-      dataCadastro: new Date(doc.data().timestamp?.toDate()).toLocaleDateString(),
+      modalidadeDeAula: doc.data().modalidadeDeAula || "Não informado",
+      // dataCadastro: new Date(doc.data().timestamp?.toDate()).toLocaleDateString(),
+      // dataCadastro: doc.data().dataCadastro.toDate().toLocaleDateString("pt-BR"),
+      dataCadastro: parseDataHoraPtBr(doc.data().dataCadastro),
       status: ['Ativo', 'Inativo', 'Pendente'][Math.floor(Math.random() * 3)]
     }));
 
     setAlunos(resultados);
     setCarregando(false);
+  };
+
+  const parseDataHoraPtBr = (dataStr: string): string => {
+    const [data, hora] = dataStr.split(','); // ["27/04/2025", " 08:58:07"]
+    const [dia, mes, ano] = data.trim().split('/');
+    const dataIso = `${ano}-${mes}-${dia}T${hora.trim()}`; // "2025-04-27T08:58:07"
+    const dataObj = new Date(dataIso);
+
+    return isNaN(dataObj.getTime())
+      ? 'Data inválida'
+      : dataObj.toLocaleString("pt-BR", {
+        day: '2-digit',
+        month: '2-digit',
+        year: 'numeric',
+        hour: '2-digit',
+        minute: '2-digit',
+        second: '2-digit',
+      });
   };
 
   const handleBuscar = async () => {
@@ -86,7 +106,7 @@ export default function ConsultaAlunos() {
     const resultados = querySnapshot.docs.map(doc => ({
       id: doc.id,
       ...(doc.data() as Omit<Aluno, 'id'>),
-      dataCadastro: new Date(doc.data().timestamp?.toDate()).toLocaleDateString(),
+      dataCadastro: doc.data().dataCadastro.toLocaleDateString("pt-BR"),
       status: ['Ativo', 'Inativo', 'Pendente'][Math.floor(Math.random() * 3)]
     }));
 
@@ -94,7 +114,6 @@ export default function ConsultaAlunos() {
     setCarregando(false);
   };
   const handleExportExcel = () => {
-    // Configura os dados para exportar
     const dataToExport = alunos.map(aluno => ({
       Nome: aluno.nome,
       Email: aluno.email,
@@ -103,18 +122,15 @@ export default function ConsultaAlunos() {
       Cidade: aluno.cidade,
       Estado: aluno.estado,
       Logradouro: aluno.logradouro,
-      DataCadastro: aluno.dataCadastro,      
-      ModelidadeAula: aluno.modalidadeDeAula,      
+      DataCadastro: aluno.dataCadastro,
+      ModelidadeAula: aluno.modalidadeDeAula,
       Status: aluno.status,
       ModalidadeDeAula: aluno.modalidadeDeAula,
     }));
 
-    // Cria a worksheet e o workbook
     const worksheet = XLSX.utils.json_to_sheet(dataToExport);
     const workbook = XLSX.utils.book_new();
     XLSX.utils.book_append_sheet(workbook, worksheet, "alunos");
-
-    // Exporta o arquivo
     XLSX.writeFile(workbook, "alunos.xlsx");
   };
 
@@ -222,7 +238,7 @@ export default function ConsultaAlunos() {
                         </th>
                         <th scope="col" className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                           Contato
-                        </th>                        
+                        </th>
                         <th scope="col" className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                           Profissão
                         </th>
@@ -231,13 +247,13 @@ export default function ConsultaAlunos() {
                         </th>
                         <th scope="col" className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                           Estado
-                        </th>                        
+                        </th>
                         <th scope="col" className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                           Cidade
                         </th>
                         <th scope="col" className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                           Lougradouro
-                        </th>                        
+                        </th>
                         <th scope="col" className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                           Numero da Casa
                         </th>
@@ -278,7 +294,7 @@ export default function ConsultaAlunos() {
                               {aluno.email}
                             </div>
                           </td>
-                          
+
                           <td className="px-4 py-4 whitespace-nowrap">
                             <div className="flex items-center text-sm text-gray-900">
                               <FiMapPin className="mr-2 text-gray-400" />
@@ -322,22 +338,22 @@ export default function ConsultaAlunos() {
                           </td>
 
                           <td className="px-4 py-4 whitespace-nowrap text-sm text-gray-500">
-                            <div className="flex items-center min-w-[120px]"> 
-                              <FiBook className="mr-2 text-gray-400" /> 
-                              <span className="truncate">{aluno.cpfCnpj}</span> 
+                            <div className="flex items-center min-w-[120px]">
+                              <FiBook className="mr-2 text-gray-400" />
+                              <span className="truncate">{aluno.cpfCnpj}</span>
                             </div>
                           </td>
                           <td className="px-4 py-4 whitespace-nowrap text-sm text-gray-500">
-                            <div className="flex items-center min-w-[120px]"> 
-                              <FiBook className="mr-2 text-gray-400" /> 
-                              <span className="truncate">{aluno.modalidadeDeAula}</span> 
+                            <div className="flex items-center min-w-[120px]">
+                              <FiBook className="mr-2 text-gray-400" />
+                              <span className="truncate">{aluno.modalidadeDeAula}</span>
                             </div>
                           </td>
 
                           <td className="px-4 py-4 whitespace-nowrap text-sm text-gray-500">
-                            <div className="flex items-center min-w-[120px]"> 
-                              <FiBook className="mr-2 text-gray-400" /> 
-                              <span className="truncate">{aluno.dataCadastro}</span> 
+                            <div className="flex items-center min-w-[120px]">
+                              <FiBook className="mr-2 text-gray-400" />
+                              <span className="truncate">{aluno.dataCadastro}</span>
                             </div>
                           </td>
 
