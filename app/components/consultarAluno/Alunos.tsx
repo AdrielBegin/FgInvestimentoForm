@@ -374,14 +374,14 @@ export default function ConsultaAlunos() {
                           </div>
                           <div className="ml-4">
                             <div className="text-sm font-medium text-gray-900">{aluno.nome}</div>
-                            <div className="text-xs text-gray-500">
+                            {/* <div className="text-xs text-gray-500">
                               <span className={`px-1.5 py-0.5 inline-flex text-xs leading-4 font-semibold rounded-full 
                                 ${aluno.status === 'Ativo' ? 'bg-green-100 text-green-800' :
                                   aluno.status === 'Inativo' ? 'bg-red-100 text-red-800' :
                                     'bg-yellow-100 text-yellow-800'}`}>
                                 {aluno.status}
                               </span>
-                            </div>
+                            </div> */}
                           </div>
                         </div>
                         {mobileOpenId === aluno.id ? (
