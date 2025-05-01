@@ -8,6 +8,7 @@ import { UserContext } from "../providers/Providers";
 import { useRouter } from 'next/navigation';
 import { toast } from 'react-toastify';
 import { v4 as uuidv4 } from 'uuid';
+import Script from 'next/script';
 
 export default function FormularioMercadoPago() {
 
@@ -165,6 +166,11 @@ export default function FormularioMercadoPago() {
 
   return (
     <main className="min-h-screen bg-gradient-to-br from-green-50 flex items-center justify-center p-4">
+      <Script
+        src="https://www.mercadopago.com/v2/security.js"
+        data-view="item"
+        strategy="afterInteractive"        
+      />
       <div className="w-full max-w-4xl bg-white rounded-2xl shadow-xl overflow-hidden">
         <div className="md:flex">
           {/* Left Side - Course Information */}

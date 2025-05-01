@@ -4,7 +4,12 @@ import mpClient from "@/app/lib/mercado-pago";
 
 
 export async function POST(req: NextRequest) {
-  const { userEmail,nameClient } = await req.json();
+  const {
+    userEmail,
+    nameClient,
+    cpfClient,
+    idClient,
+  } = await req.json();
 
   const externalReference = `order-${Date.now()}-${Math.random().toString(36).substring(2, 7)}`;
 
@@ -14,7 +19,7 @@ export async function POST(req: NextRequest) {
     const createdPreference = await preference.create({
       body: {
         external_reference: externalReference, // IMPORTANTE: Isso aumenta a pontuação da sua integração com o Mercado Pago - É o id da compra no nosso sistema
-        
+
         metadata: {
           // O Mercado Pago converte para snake_case, ou seja, testeId vai virar teste_id
           userEmail: userEmail,
@@ -23,8 +28,14 @@ export async function POST(req: NextRequest) {
         },
         ...(userEmail && {
           payer: {
+            type:"customer",
+            id: idClient,
             email: userEmail,
-            name:nameClient
+            name: nameClient,
+            identification: {
+              type: "CPF",
+              number: cpfClient
+            }
           },
         }),
 
@@ -42,7 +53,8 @@ export async function POST(req: NextRequest) {
         payment_methods: {
 
           installments: 12,
-
+          excluded_payment_types: [],
+          excluded_payment_methods: [],
         },
         auto_return: "approved",
         back_urls: {

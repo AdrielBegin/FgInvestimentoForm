@@ -9,7 +9,7 @@ import ConsultaPagamentos from '@/app/components/consultarPagamento/PagamentosCo
 import fg from '@/app/logo/FgSemFundo.png';
 import { UserContext } from '@/app/components/providers/Providers'; 
 import { useRouter } from 'next/navigation';
-
+import { FiUser, FiDollarSign, FiMenu, FiX, FiLogOut } from 'react-icons/fi';
 
 const roboto = Roboto({
     weight: ["400", "700"],
@@ -19,12 +19,14 @@ const roboto = Roboto({
 });
 
 export default function TelaAdmin() {
-    const { user, loading } = useContext(UserContext);
+    const { user, loading, logout } = useContext(UserContext);
     const router = useRouter();
 
     const [activeTab, setActiveTab] = useState('alunos');
     const [showHeader, setShowHeader] = useState(true);
     const [lastScrollY, setLastScrollY] = useState(0);
+    const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+    const [scrolled, setScrolled] = useState(false);
        
     useEffect(() => {        
         if (!user) {
@@ -41,8 +43,16 @@ export default function TelaAdmin() {
     useEffect(() => {
         const handleScroll = () => {
             const currentScrollY = window.scrollY;
+            
+            // Efeito de blur/glass quando scrollar
+            if (currentScrollY > 10) {
+                setScrolled(true);
+            } else {
+                setScrolled(false);
+            }
 
-            if (currentScrollY > lastScrollY) {
+            // Esconder/mostrar header
+            if (currentScrollY > lastScrollY && currentScrollY > 100) {
                 setShowHeader(false);
             } else {
                 setShowHeader(true);
@@ -65,6 +75,11 @@ export default function TelaAdmin() {
         );
     }
 
+    const handleLogout = () => {
+        logout();
+        router.push('/login');
+    };
+
     return (
         <>
             <Head>
@@ -74,42 +89,122 @@ export default function TelaAdmin() {
                 <link rel="icon" href="/favicon.ico" />
             </Head>
 
-            <div className={`${roboto.className} font-sans text-gray-800 bg-gray-50`}>
+            <div className={`${roboto.className} font-sans text-gray-800 bg-gray-50 flex flex-col min-h-screen`}>
+                {/* Header Moderno */}
                 <header
-                    className={`w-full bg-blue-600 py-3 px-6 sticky top-0 z-50 shadow-md flex justify-between items-center transition-transform duration-300 ${
-                        showHeader ? 'translate-y-0' : '-translate-y-full'
+                    className={`fixed w-full py-3 px-6 z-50 transition-all duration-500 ${
+                        showHeader ? 'top-0' : '-top-24'
+                    } ${
+                        scrolled ? 'backdrop-blur-md bg-blue-600/90' : 'bg-blue-600'
                     }`}
                 >
-                    <Image
-                        src={fg}
-                        alt="Logo"
-                        width={100}
-                        height={100}
-                        className="filter brightness-0 invert"
-                    />
+                    <div className="max-w-7xl mx-auto flex justify-between items-center">
+                        <div className="flex items-center space-x-4">
+                            <Image
+                                src={fg}
+                                alt="Logo"
+                                width={80}
+                                height={80}
+                                className="filter brightness-0 invert hover:scale-105 transition-transform"
+                            />
+                            <span className="text-white font-bold hidden md:block text-xl">Painel Admin</span>
+                        </div>
 
-                    <nav className="flex gap-4 items-center">
-                        <button
-                            onClick={() => setActiveTab('alunos')}
-                            className={`px-4 py-2 rounded-md transition-colors duration-300 ${
-                                activeTab === 'alunos' ? 'bg-white text-blue-600' : 'bg-blue-500 text-white hover:bg-blue-400'
-                            }`}
+                        {/* Menu Desktop */}
+                        <nav className="hidden md:flex items-center space-x-2">
+                            <a
+                                onClick={() => setActiveTab('alunos')}
+                                className={`flex items-center px-4 py-2 rounded-lg transition-all duration-300 cursor-pointer ${
+                                    activeTab === 'alunos' 
+                                        ? 'bg-white text-blue-600 shadow-md' 
+                                        : 'text-white hover:bg-blue-500/50'
+                                }`}
+                            >
+                                <FiUser className="mr-2" />
+                                Alunos
+                            </a>
+                            <a
+                                onClick={() => setActiveTab('pagamentos')}
+                                className={`flex items-center px-4 py-2 rounded-lg transition-all duration-300 cursor-pointer ${
+                                    activeTab === 'pagamentos' 
+                                        ? 'bg-white text-blue-600 shadow-md' 
+                                        : 'text-white hover:bg-blue-500/50'
+                                }`}
+                            >
+                                <FiDollarSign className="mr-2" />
+                                Pagamentos
+                            </a>
+                            <button
+                                onClick={handleLogout}
+                                className="flex items-center px-4 py-2 rounded-lg text-white hover:bg-red-500/50 transition-all duration-300"
+                            >
+                                <FiLogOut className="mr-2" />
+                                Sair
+                            </button>
+                        </nav>
+
+                        {/* Botão Mobile */}
+                        <button 
+                            className="md:hidden text-white p-2"
+                            onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
                         >
-                            Consultar Alunos
+                            {mobileMenuOpen ? <FiX size={24} /> : <FiMenu size={24} />}
                         </button>
-                        <button
-                            onClick={() => setActiveTab('pagamentos')}
-                            className={`px-4 py-2 rounded-md transition-colors duration-300 ${
-                                activeTab === 'pagamentos' ? 'bg-white text-blue-600' : 'bg-blue-500 text-white hover:bg-blue-400'
-                            }`}
-                        >
-                            Consultar Pagamentos
-                        </button>
-                    </nav>
+                    </div>
+
+                    {/* Menu Mobile */}
+                    {mobileMenuOpen && (
+                        <div className="md:hidden mt-4 pb-4">
+                            <div className="flex flex-col space-y-2">
+                                <a
+                                    onClick={() => {
+                                        setActiveTab('alunos');
+                                        setMobileMenuOpen(false);
+                                    }}
+                                    className={`flex items-center px-4 py-3 rounded-lg transition-all duration-300 cursor-pointer ${
+                                        activeTab === 'alunos' 
+                                            ? 'bg-white text-blue-600' 
+                                            : 'text-white hover:bg-blue-500/50'
+                                    }`}
+                                >
+                                    <FiUser className="mr-3" />
+                                    Alunos
+                                </a>
+                                <a
+                                    onClick={() => {
+                                        setActiveTab('pagamentos');
+                                        setMobileMenuOpen(false);
+                                    }}
+                                    className={`flex items-center px-4 py-3 rounded-lg transition-all duration-300 cursor-pointer ${
+                                        activeTab === 'pagamentos' 
+                                            ? 'bg-white text-blue-600' 
+                                            : 'text-white hover:bg-blue-500/50'
+                                    }`}
+                                >
+                                    <FiDollarSign className="mr-3" />
+                                    Pagamentos
+                                </a>
+                                <button
+                                    onClick={handleLogout}
+                                    className="flex items-center px-4 py-3 rounded-lg text-white hover:bg-red-500/50 transition-all duration-300 text-left"
+                                >
+                                    <FiLogOut className="mr-3" />
+                                    Sair
+                                </button>
+                            </div>
+                        </div>
+                    )}
                 </header>
-                <div className="p-6">
+
+                {/* Conteúdo */}
+                <main className="flex-grow pt-24 pb-10 px-6 max-w-7xl mx-auto">
                     {activeTab === 'alunos' ? <ConsultaAlunos /> : <ConsultaPagamentos />}
-                </div>
+                </main>
+
+                {/* Footer Minimalista */}
+                <footer className="bg-blue-600 text-white py-4 text-center">
+                    <p className="text-sm">© {new Date().getFullYear()} </p>
+                </footer>                
             </div>
         </>
     );

@@ -1,7 +1,7 @@
 "use client";
 import React, { createContext, useState, useEffect, ReactNode, FC } from "react";
 import { app } from '@/app/config/firebaseClient'
-import { onAuthStateChanged, getAuth } from 'firebase/auth'
+import { onAuthStateChanged, getAuth, signOut } from 'firebase/auth'
 import { doc, getDoc, getFirestore } from "firebase/firestore";
 
 const auth = getAuth(app);
@@ -18,10 +18,12 @@ interface User {
 interface UserContextType {
     user: User | null;
     loading: boolean;
+    logout: () => Promise<void>;
 }
 const defaultUserContext: UserContextType = {
     user: null,
     loading: true,
+    logout: async () => {},
 };
 
 const UserContext = createContext<UserContextType>(defaultUserContext);
@@ -29,16 +31,27 @@ const UserContext = createContext<UserContextType>(defaultUserContext);
 const UserProvider = ({ children }: { children: ReactNode }) => {
     const [user, setUser] = useState<User | null>(null);
     const [loading, setLoading] = useState(true);
+    
+
+    const handleLogout = async () => {
+        try {
+            await signOut(auth);
+            setUser(null);
+        } catch (error) {
+            console.error("Erro ao fazer logout:", error);
+            throw error;
+        }
+    };
 
     useEffect(() => {
         const unsubscribe = onAuthStateChanged(auth, async (firebaseUser) => {
             if (firebaseUser) {
                 const { uid, email, displayName } = firebaseUser;
 
-                try {                    
+                try {
                     const userDocRef = doc(db, "users", uid);
                     const userDocSnapshot = await getDoc(userDocRef);
-                    
+
                     if (userDocSnapshot.exists()) {
                         const userData = userDocSnapshot.data();
 
@@ -49,7 +62,7 @@ const UserProvider = ({ children }: { children: ReactNode }) => {
                             role: userData.role ?? null,
                         });
                     } else {
-                        console.warn(`O usuário com uid ${uid} não foi encontrado na coleção 'users'.`);                        
+                        console.warn(`O usuário com uid ${uid} não foi encontrado na coleção 'users'.`);
                         setUser({
                             uid,
                             email: email ?? null,
@@ -77,7 +90,7 @@ const UserProvider = ({ children }: { children: ReactNode }) => {
 
 
     return (
-        <UserContext.Provider value={{ user, loading }}>
+        <UserContext.Provider value={{ user, loading, logout: handleLogout }}>
             {children}
         </UserContext.Provider>
     );

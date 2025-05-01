@@ -126,7 +126,7 @@ export default function Home() {
                         <FaWhatsapp className="text-3xl hover:text-yellow-400 transition" />
                     </a>
                 </div>
-                <p className="text-sm opacity-80">© 2025 FG School. Todos os direitos reservados.</p>
+                <p className="text-sm opacity-80">© 2025. Todos os direitos reservados.</p>
             </footer>
         </div>
     );
