@@ -20,6 +20,10 @@ interface Pagamento {
         email: string;
         first_name?: string;
         last_name?: string;
+        identification: {
+            type?: "CPF",
+            number?: string
+          },
     };
 }
 
@@ -286,6 +290,9 @@ export default function PagamentosConsulta() {
                                         <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                                             Referência
                                         </th>
+                                        <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                            CPF
+                                        </th>
                                     </tr>
                                 </thead>
                                 <tbody className="bg-white divide-y divide-gray-200">
@@ -316,6 +323,9 @@ export default function PagamentosConsulta() {
                                             </td>
                                             <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
                                                 {pagamento.external_reference || "-"}
+                                            </td>
+                                            <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                                                {pagamento.payer.identification.number || "-"}
                                             </td>
                                         </tr>
                                     ))}
