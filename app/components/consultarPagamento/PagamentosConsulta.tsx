@@ -235,11 +235,11 @@ export default function PagamentosConsulta() {
 
                         <button
                             onClick={exportarXLSX}
-                            className="flex items-center justify-center ml-2 px-4 py-2 bg-green-600 text-white rounded-md hover:bg-green-700"
+                            className="flex items-center justify-center ml-2 px-4 py-2 bg-yellow-600 hover:bg-yellow-700 text-white rounded-md transition-colors"
                             disabled={pagamentos.length === 0 || carregando}
                         >
                             <FiDownload className="mr-2" />
-                            Exportar XLSX
+                            Exportar Excel
                         </button>
                     </div>
                 </div>
