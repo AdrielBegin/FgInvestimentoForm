@@ -23,7 +23,7 @@ export default function Home() {
                     alt="Logo"
                     width={100}
                     height={100}
-                    className="filter brightness-0 invert"
+                    className="filter brightness-0 invert"                    
                 />
                 <nav className="flex gap-4 items-center text-base">
                     <a href="#sobre" className="text-white hover:text-yellow-400 font-medium transition-colors">Sobre o Curso</a>

@@ -48,7 +48,8 @@ export default function FormularioMercadoPago() {
     statusPagemento: '',
     profissao: '',
     logradouro: '',
-    numeroCasa: ''
+    numeroCasa: '',
+    numeroContato: ''
   });
 
   const modalidadeDeAulas = [
@@ -60,19 +61,31 @@ export default function FormularioMercadoPago() {
     const numeric = value.replace(/\D/g, '');
 
     if (numeric.length <= 11) {
-      // Aplica máscara de CPF
       return numeric
         .replace(/(\d{3})(\d)/, '$1.$2')
         .replace(/(\d{3})(\d)/, '$1.$2')
         .replace(/(\d{3})(\d{1,2})$/, '$1-$2');
     } else {
-
       return numeric
         .replace(/^(\d{2})(\d)/, '$1.$2')
         .replace(/^(\d{2})\.(\d{3})(\d)/, '$1.$2.$3')
         .replace(/\.(\d{3})(\d)/, '.$1/$2')
         .replace(/(\d{4})(\d{1,2})$/, '$1-$2');
     }
+  };
+
+  const handlePhoneChange = (e: any) => {
+    let value = e.target.value.replace(/\D/g, '');
+    if (value.length > 10) {
+      value = value.replace(/^(\d{2})(\d{5})(\d{4}).*/, '($1) $2-$3');
+    } else {
+      value = value.replace(/^(\d{2})(\d{4})(\d{0,4}).*/, '($1) $2-$3');
+    }
+
+    setFormData((prev) => ({
+      ...prev,
+      numeroContato: value,
+    }));
   };
 
   const saveToFirebase = async () => {
@@ -169,7 +182,7 @@ export default function FormularioMercadoPago() {
       <Script
         src="https://www.mercadopago.com/v2/security.js"
         data-view="item"
-        strategy="afterInteractive"        
+        strategy="afterInteractive"
       />
       <div className="w-full max-w-4xl bg-white rounded-2xl shadow-xl overflow-hidden">
         <div className="md:flex">
@@ -258,6 +271,20 @@ export default function FormularioMercadoPago() {
                     name="email"
                     value={formData.email}
                     onChange={handleChange}
+                    className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent transition-all"
+                    required
+                  />
+                </div>
+
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-1">
+                    Celular/Telefone
+                  </label>
+                  <input
+                    type="text"
+                    name="numeroContato"
+                    value={formData.numeroContato}
+                    onChange={handlePhoneChange}
                     className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent transition-all"
                     required
                   />

@@ -34,6 +34,7 @@ type Aluno = {
   dataCadastro?: string;
   status?: string;
   modalidadeDeAula?: string;
+  numeroContato?: string;
 };
 
 export default function ConsultaAlunos() {
@@ -116,6 +117,7 @@ export default function ConsultaAlunos() {
       Nome: aluno.nome,
       Email: aluno.email,
       CpfCnpj: aluno.cpfCnpj,
+      Celular_Telefone: aluno.numeroContato,
       CEP: aluno.cep,
       Cidade: aluno.cidade,
       Estado: aluno.estado,
@@ -241,6 +243,9 @@ export default function ConsultaAlunos() {
                           Profissão
                         </th>
                         <th scope="col" className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                          Celular/Telefone
+                        </th>
+                        <th scope="col" className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                           CEP
                         </th>
                         <th scope="col" className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
@@ -297,6 +302,13 @@ export default function ConsultaAlunos() {
                             <div className="flex items-center text-sm text-gray-900">
                               <FiMapPin className="mr-2 text-gray-400" />
                               {aluno.profissao}
+                            </div>
+                          </td>
+
+                          <td className="px-4 py-4 whitespace-nowrap">
+                            <div className="flex items-center text-sm text-gray-900">
+                              <FiMapPin className="mr-2 text-gray-400" />
+                              {aluno.numeroContato}
                             </div>
                           </td>
 

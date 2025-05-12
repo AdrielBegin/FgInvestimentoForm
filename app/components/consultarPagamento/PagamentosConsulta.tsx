@@ -85,10 +85,7 @@ export default function PagamentosConsulta() {
             setCarregando(false);
         }
     };
-
-
-    const aplicarFiltros = () => {
-        // Converter datas para o formato do Mercado Pago se fornecidas
+    const aplicarFiltros = () => {        
         let beginDate = params.begin_date;
         let endDate = params.end_date;
 
@@ -130,7 +127,6 @@ export default function PagamentosConsulta() {
     const exportarXLSX = () => {
         if (pagamentos.length === 0) return;
 
-        // Organizando os dados para exportação
         const dataToExport = pagamentos.map((pagamento) => ({
             "ID": pagamento.id,
             "Data de Criação": new Date(pagamento.date_created).toLocaleString("pt-BR"),
