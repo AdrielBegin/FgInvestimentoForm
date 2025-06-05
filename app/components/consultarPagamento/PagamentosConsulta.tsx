@@ -302,11 +302,11 @@ export default function PagamentosConsulta() {
                                             </td>
                                             <td className="px-6 py-4 whitespace-nowrap">
                                                 <span className={`px-2 py-1 text-xs rounded-full ${getStatusClass(pagamento.status)}`}>
-                                                    {traduzirStatus(pagamento.status)}
+                                                    {traduzirStatus(pagamento.status ?? 'Não encontrado')}
                                                 </span>
                                             </td>
                                             <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                                                {traduzirMetodo(pagamento.payment_type_id)}
+                                                {traduzirMetodo(pagamento.payment_type_id ?? 'Não encontrado')}
                                             </td>
                                             <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900 font-medium">
                                                 {pagamento.transaction_amount.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' })}
@@ -315,7 +315,7 @@ export default function PagamentosConsulta() {
                                                 {pagamento.payer?.email ?? 'Não encontrado'}
                                             </td>
                                             <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                                                {pagamento.payer.first_name}
+                                                {pagamento.payer?.first_name ?? 'Não encontrado'}
                                             </td>
                                             <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
                                                 {pagamento.external_reference || "-"}
