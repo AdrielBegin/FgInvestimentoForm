@@ -312,7 +312,7 @@ export default function PagamentosConsulta() {
                                                 {pagamento.transaction_amount.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' })}
                                             </td>
                                             <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                                                {pagamento.payer.email}
+                                                {pagamento.payer?.email ?? 'Não encontrado'}
                                             </td>
                                             <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
                                                 {pagamento.payer.first_name}
