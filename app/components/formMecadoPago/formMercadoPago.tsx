@@ -49,7 +49,10 @@ export default function FormularioMercadoPago() {
     profissao: '',
     logradouro: '',
     numeroCasa: '',
-    numeroContato: ''
+    numeroContato: '',
+    excluido: false,
+    turma:'',
+    matricula:''
   });
 
   const modalidadeDeAulas = [

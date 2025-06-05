@@ -57,7 +57,9 @@ export default function ConsultaAlunos() {
     const alunosRef = collection(db, 'alunos');
     const querySnapshot = await getDocs(alunosRef);
 
-    const resultados = querySnapshot.docs.map(doc => ({
+    const resultados = querySnapshot.docs
+    .filter(doc => doc.data().excluido !== true)
+    .map(doc => ({
       id: doc.id,
       ...(doc.data() as Omit<Aluno, 'id'>),
       modalidadeDeAula: doc.data().modalidadeDeAula || "Não informado",
