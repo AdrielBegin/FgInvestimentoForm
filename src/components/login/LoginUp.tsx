@@ -13,6 +13,8 @@ import Link from "next/link";
 import { collection, query, where, getDocs } from 'firebase/firestore';
 import db from "@/src/app/config/firebaseClient";
 import useMercadoPago from "@/src/app/hooks/useMercadoPago";
+import { toast, ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 export default function Login() {
   const [email, setEmail] = useState('');
@@ -26,7 +28,7 @@ export default function Login() {
     setError('');
 
     try {
-      
+
       const alunosRef = collection(db, 'alunos');
       const q = query(alunosRef, where("email", "==", email));
       const querySnapshot = await getDocs(q);
@@ -54,17 +56,26 @@ export default function Login() {
         const userRole = await getUserRole(user.uid);
 
         if (user) {
-          if (userRole === "admin") {
-            router.push('/routes/telaAdmin');
-          } else {
-            router.push('/routes/formularioMercadoPago');
-          }
-        }
+          toast.success('Login realizado com sucesso!', {
+            position: "top-right",
+            autoClose: 3000,
+            hideProgressBar: false,
+            closeOnClick: true,
+            pauseOnHover: true,
+            draggable: true,
+          });
 
+          setTimeout(() => {
+            if (userRole === "admin") {
+              router.push('/routes/telaAdmin');
+            } else {
+              router.push('/routes/formularioMercadoPago');
+            }
+          }, 1000); 
+        }
       }
     } catch (err) {
-      setError('Falha no login. Verifique suas credenciais.');
-      console.error(err);
+      setError('Falha no login. Verifique suas credenciais.');      
     }
   };
 
@@ -81,6 +92,17 @@ export default function Login() {
 
   return (
     <div className="min-h-screen flex items-center justify-center p-4">
+      <ToastContainer
+        position="top-right"
+        autoClose={3000}
+        hideProgressBar={false}
+        newestOnTop={false}
+        closeOnClick
+        rtl={false}
+        pauseOnFocusLoss
+        draggable
+        pauseOnHover
+      />
       <div className="max-w-6xl w-full bg-white rounded-2xl shadow-xl overflow-hidden flex flex-col md:flex-row">
         <div className="w-full md:w-1/2 bg-blue-600 p-12 flex flex-col items-center justify-center text-white">
           <div className="mb-8">

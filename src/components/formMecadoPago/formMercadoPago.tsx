@@ -6,10 +6,10 @@ import fg from '@/public/logo/LogoFG.svg'
 import axios from 'axios';
 import { UserContext } from "../providers/Providers";
 import { useRouter } from 'next/navigation';
-import { toast } from 'react-toastify';
 import { v4 as uuidv4 } from 'uuid';
 import Script from 'next/script';
-
+import { toast, ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 export default function FormularioMercadoPago() {
 
   const router = useRouter();
@@ -51,8 +51,8 @@ export default function FormularioMercadoPago() {
     numeroCasa: '',
     numeroContato: '',
     excluido: false,
-    turma:'',
-    matricula:''
+    turma: '',
+    matricula: ''
   });
 
   const modalidadeDeAulas = [
@@ -182,6 +182,18 @@ export default function FormularioMercadoPago() {
 
   return (
     <main className="min-h-screen bg-gradient-to-br from-green-50 flex items-center justify-center p-4">
+      <ToastContainer
+        position="top-right"
+        autoClose={3000}
+        hideProgressBar={false}
+        newestOnTop={false}
+        closeOnClick
+        rtl={false}
+        pauseOnFocusLoss
+        draggable
+        pauseOnHover
+      />
+      
       <Script
         src="https://www.mercadopago.com/v2/security.js"
         data-view="item"

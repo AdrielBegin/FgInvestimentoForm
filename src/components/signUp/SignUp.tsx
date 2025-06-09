@@ -5,6 +5,8 @@ import { useRouter } from 'next/navigation';
 import fg from '@/public/logo/LogoFG.svg';
 import Image from 'next/image';
 import Link from "next/link";
+import { toast, ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 export default function SignUp({ onSuccess }: { onSuccess?: () => void }) {
   const [name, setName] = useState('');
@@ -13,7 +15,7 @@ export default function SignUp({ onSuccess }: { onSuccess?: () => void }) {
   const [error, setError] = useState('');
   const router = useRouter();
 
-  const handleSubmit = async (e: React.FormEvent) => {    
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setError('');
     try {
@@ -28,6 +30,17 @@ export default function SignUp({ onSuccess }: { onSuccess?: () => void }) {
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-green-50 to-blue-50 flex items-center justify-center p-4">
+      <ToastContainer
+        position="top-right"
+        autoClose={3000}
+        hideProgressBar={false}
+        newestOnTop={false}
+        closeOnClick
+        rtl={false}
+        pauseOnFocusLoss
+        draggable
+        pauseOnHover
+      />
       <div className="max-w-6xl w-full bg-white rounded-2xl shadow-xl overflow-hidden flex flex-col md:flex-row">
         {/* Left Side - Logo and Welcome */}
         <div className="w-full md:w-1/2 bg-blue-600 p-12 flex flex-col items-center justify-center text-white">
@@ -40,12 +53,12 @@ export default function SignUp({ onSuccess }: { onSuccess?: () => void }) {
               className="filter brightness-0 invert"
             />
           </div>
-          
+
           <h2 className="text-3xl font-bold mb-4 text-center">Bem-vindo à nossa plataforma!</h2>
           <p className="text-center opacity-90 mb-8">
             Junte-se a nós!
           </p>
-          
+
           <div className="w-full max-w-xs">
             <div className="flex items-center mb-4">
               <div className="flex-shrink-0 h-8 w-8 rounded-full bg-yellow-500 flex items-center justify-center mr-3">
@@ -62,7 +75,7 @@ export default function SignUp({ onSuccess }: { onSuccess?: () => void }) {
                 </svg>
               </div>
               <span className="text-sm">Segurança garantida</span>
-            </div>            
+            </div>
           </div>
         </div>
 
@@ -70,14 +83,14 @@ export default function SignUp({ onSuccess }: { onSuccess?: () => void }) {
         <div className="w-full md:w-1/2 p-12 flex flex-col justify-center">
           <h1 className="text-3xl font-bold text-gray-800 mb-2">Crie sua conta</h1>
           <p className="text-gray-600 mb-8">Preencha os campos abaixo para se registrar</p>
-          
+
           <form onSubmit={handleSubmit} className="space-y-6">
             {error && (
               <div className="p-3 bg-red-50 text-red-600 rounded-lg text-sm">
                 {error}
               </div>
             )}
-            
+
             <div className="space-y-1">
               <label htmlFor="name" className="block text-sm font-medium text-gray-700">
                 Nome completo
@@ -99,7 +112,7 @@ export default function SignUp({ onSuccess }: { onSuccess?: () => void }) {
                 </div>
               </div>
             </div>
-            
+
             <div className="space-y-1">
               <label htmlFor="email" className="block text-sm font-medium text-gray-700">
                 Email
@@ -121,7 +134,7 @@ export default function SignUp({ onSuccess }: { onSuccess?: () => void }) {
                 </div>
               </div>
             </div>
-            
+
             <div className="space-y-1">
               <label htmlFor="password" className="block text-sm font-medium text-gray-700">
                 Senha
@@ -145,7 +158,7 @@ export default function SignUp({ onSuccess }: { onSuccess?: () => void }) {
               </div>
               <p className="text-xs text-gray-500 mt-1">Mínimo de 6 caracteres</p>
             </div>
-            
+
             <div className="flex items-center">
               <input
                 id="terms"
@@ -176,11 +189,11 @@ export default function SignUp({ onSuccess }: { onSuccess?: () => void }) {
 
 
           </form>
-          
+
           <div className="mt-6 text-center">
             <p className="text-sm text-gray-600">
               Já tem uma conta?{' '}
-              <a href="/login" className="font-medium text-blue-600 hover:text-blue-800">
+              <a href="/routes/login" className="font-medium text-blue-600 hover:text-blue-800">
                 Faça login
               </a>
             </p>
