@@ -42,7 +42,8 @@ export default function ConsultaAlunos() {
   const [modalEdicaoAberto, setModalEdicaoAberto] = useState(false);
   const [modalExclusaoAberto, setModalExclusaoAberto] = useState(false);
   const [alunoSelecionado, setAlunoSelecionado] = useState<string | null>(null);
-
+  const [dataInicio, setDataInicio] = useState<string>('');
+  const [dataFim, setDataFim] = useState<string>('');
 
   useEffect(() => {
     carregarTodosAlunos();
@@ -68,7 +69,7 @@ export default function ConsultaAlunos() {
     });
   };
 
-    const handleExclusao = () => {
+  const handleExclusao = () => {
     toast.success('Aluno excluido com sucesso!', {
       position: "top-right",
       autoClose: 3000,
@@ -129,30 +130,61 @@ export default function ConsultaAlunos() {
   };
 
   const handleBuscar = async () => {
-    if (!busca.trim()) {
+    setCarregando(true);
+    const alunosRef = collection(db, 'alunos');
+
+    // Cria um array de condições de query
+    const conditions = [];
+
+    // Adiciona condição de busca por texto se houver
+    if (busca.trim()) {
+      const campo = /^\d+$/.test(busca) ? 'cpfCnpj' : 'nome';
+      conditions.push(where(campo, '>=', busca));
+      conditions.push(where(campo, '<=', busca + '\uf8ff'));
+    }
+
+    // Adiciona condições de data se existirem
+    if (dataInicio) {
+      const inicioDate = new Date(dataInicio);
+      inicioDate.setHours(0, 0, 0, 0);
+      conditions.push(where('dataCadastro', '>=', inicioDate));
+    }
+
+    if (dataFim) {
+      const fimDate = new Date(dataFim);
+      fimDate.setHours(23, 59, 59, 999);
+      conditions.push(where('dataCadastro', '<=', fimDate));
+    }
+
+    if (filtroStatus !== 'todos') {
+      conditions.push(where('status', '==', filtroStatus));
+    }
+
+    if (conditions.length === 0) {
       carregarTodosAlunos();
       return;
     }
 
-    setCarregando(true);
-    const alunosRef = collection(db, 'alunos');
+    const q = query(alunosRef, ...conditions);
 
-    const campo = /^\d+$/.test(busca) ? 'cpfCnpj' : 'nome';
+    try {
+      const querySnapshot = await getDocs(q);
 
-    const q = query(alunosRef, where(campo, '>=', busca), where(campo, '<=', busca + '\uf8ff'));
+      const resultados = querySnapshot.docs.map(doc => ({
+        id: doc.id,
+        ...(doc.data() as Omit<Aluno, 'id'>),
+        dataCadastro: doc.data().dataCadastro.toLocaleDateString("pt-BR"),
+        status: doc.data().status || ['Ativo', 'Inativo', 'Pendente'][Math.floor(Math.random() * 3)]
+      }));
 
-    const querySnapshot = await getDocs(q);
-
-    const resultados = querySnapshot.docs.map(doc => ({
-      id: doc.id,
-      ...(doc.data() as Omit<Aluno, 'id'>),
-      dataCadastro: doc.data().dataCadastro.toLocaleDateString("pt-BR"),
-      status: ['Ativo', 'Inativo', 'Pendente'][Math.floor(Math.random() * 3)]
-    }));
-
-    setAlunos(resultados);
-    setCarregando(false);
+      setAlunos(resultados);
+    } catch (error) {
+      console.error("Erro ao buscar alunos:", error);
+    } finally {
+      setCarregando(false);
+    }
   };
+
   const handleExportExcel = () => {
     const dataToExport = alunos.map(aluno => ({
       Nome: aluno.nome,
@@ -213,6 +245,10 @@ export default function ConsultaAlunos() {
             handleExportExcel={handleExportExcel}
             filtroStatus={filtroStatus}
             setFiltroStatus={setFiltroStatus}
+            dataInicio={dataInicio}
+            setDataInicio={setDataInicio}
+            dataFim={dataFim}
+            setDataFim={setDataFim}
           />
 
           <div className="overflow-x-auto">

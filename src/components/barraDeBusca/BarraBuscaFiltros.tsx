@@ -8,6 +8,10 @@ interface BarraBuscaFiltrosProps {
   handleExportExcel: () => void;
   filtroStatus: string;
   setFiltroStatus: (value: string) => void;
+  dataInicio: string;
+  setDataInicio: (value: string) => void;
+  dataFim: string;
+  setDataFim: (value: string) => void;
 }
 
 export default function BarraBuscaFiltros({
@@ -17,7 +21,11 @@ export default function BarraBuscaFiltros({
   carregarTodosAlunos,
   handleExportExcel,
   filtroStatus,
-  setFiltroStatus
+  setFiltroStatus,
+  dataInicio,
+  setDataInicio,
+  dataFim,
+  setDataFim
 }: BarraBuscaFiltrosProps) {
   return (
     <div className="p-4 md:p-6 border-b border-gray-200">
@@ -36,45 +44,53 @@ export default function BarraBuscaFiltros({
           />
         </div>
 
-        <div className="flex flex-col sm:flex-row gap-2">
-          <div className="flex-1">
-            <select
-              value={filtroStatus}
-              onChange={(e) => setFiltroStatus(e.target.value)}
-              className="hidden w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent transition-all"
-            >
-              <option value="todos">Todos os status</option>
-              <option value="Ativo">Ativo</option>
-              <option value="Inativo">Inativo</option>
-              <option value="Pendente">Pendente</option>
-            </select>
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+          <div>
+            <label className="block text-sm font-medium text-gray-700 mb-1">Data Início</label>
+            <input
+              type="date"
+              value={dataInicio}
+              onChange={(e) => setDataInicio(e.target.value)}
+              className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent transition-all"
+            />
           </div>
+          
+          <div>
+            <label className="block text-sm font-medium text-gray-700 mb-1">Data Fim</label>
+            <input
+              type="date"
+              value={dataFim}
+              onChange={(e) => setDataFim(e.target.value)}
+              className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent transition-all"
+            />
+          </div>          
+        
+        </div>
 
-          <div className="flex gap-2">
-            <button
-              onClick={handleBuscar}
-              className="flex-1 bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded-lg flex items-center justify-center gap-2 transition-colors"
-            >
-              <FiSearch className="hidden sm:inline" />
-              <span className="text-sm sm:text-base">Buscar</span>
-            </button>
+        <div className="flex gap-2">
+          <button
+            onClick={handleBuscar}
+            className="flex-1 bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded-lg flex items-center justify-center gap-2 transition-colors"
+          >
+            <FiSearch className="hidden sm:inline" />
+            <span className="text-sm sm:text-base">Buscar</span>
+          </button>
 
-            <button
-              onClick={carregarTodosAlunos}
-              className="flex-1 bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg flex items-center justify-center gap-2 transition-colors"
-            >
-              <FiRefreshCw className="hidden sm:inline" />
-              <span className="text-sm sm:text-base">Recarregar</span>
-            </button>
-            
-            <button
-              onClick={handleExportExcel}
-              className="flex-1 bg-yellow-600 hover:bg-yellow-700 text-white px-4 py-2 rounded-lg flex items-center justify-center gap-2 transition-colors"
-            >
-              <FiDownload />
-              Exportar Excel
-            </button>
-          </div>
+          <button
+            onClick={carregarTodosAlunos}
+            className="flex-1 bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg flex items-center justify-center gap-2 transition-colors"
+          >
+            <FiRefreshCw className="hidden sm:inline" />
+            <span className="text-sm sm:text-base">Recarregar</span>
+          </button>
+          
+          <button
+            onClick={handleExportExcel}
+            className="flex-1 bg-yellow-600 hover:bg-yellow-700 text-white px-4 py-2 rounded-lg flex items-center justify-center gap-2 transition-colors"
+          >
+            <FiDownload />
+            Exportar Excel
+          </button>
         </div>
       </div>
     </div>
