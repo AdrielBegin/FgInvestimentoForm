@@ -10,11 +10,14 @@ import { v4 as uuidv4 } from 'uuid';
 import Script from 'next/script';
 import { toast, ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import ModalAssinaturaMentoria from '../modals/ModalAssinaturaMentoria';
+
 export default function FormularioMercadoPago() {
 
   const router = useRouter();
 
   const { user, loading } = useContext(UserContext);
+  const [modalAssinaturaMentoriaAberta, setModalAssinaturaMentoriaAberta] = useState(false);
 
   useEffect(() => {
     if (!loading && !user) {
@@ -37,7 +40,7 @@ export default function FormularioMercadoPago() {
     id: uuidv4(),
     nome: '',
     email: '',
-    curso: 'Curso CADI - Carreira do Investidor',
+    curso: '',
     valor: 2000,
     cpfCnpj: '',
     cep: '',
@@ -59,6 +62,13 @@ export default function FormularioMercadoPago() {
     { value: 'Presencial', label: 'Presencial' },
     { value: 'Online', label: 'Online' }
   ]
+
+  const cursos = [
+    { value: 'cursoCadi', label: 'Curso CADI - Carreira do Investidor (R$ 2.000,00)' },
+    { value: 'mentoria', label: 'Mentoria (R$ 500.00)' }
+  ]
+
+  const isCursoMentoria = formData.curso === "mentoria";
 
   const getCpfCnpjMask = (value: string): string => {
     const numeric = value.replace(/\D/g, '');
@@ -156,17 +166,27 @@ export default function FormularioMercadoPago() {
 
       await saveToFirebase();
 
-      await createMercadoPagoCheckout({
-        userId: formData.email,
-        userEmail: formData.email,
-        name: formData.nome,
-        productName: formData.curso,
-        productPrice: formData.valor
-      });
+      if (formData.curso !== "mentoria") {
 
-      toast.dismiss('submitting');
+        await createMercadoPagoCheckout({
+          userId: formData.email,
+          userEmail: formData.email,
+          name: formData.nome,
+          productName: formData.curso,
+          productPrice: formData.valor
+        });
 
-      toast.success('Redirecionando para o pagamento!');
+        toast.dismiss('submitting');
+
+        toast.success('Redirecionando para o pagamento!');
+
+      } else if (formData.curso === "mentoria") {
+        setModalAssinaturaMentoriaAberta(true)
+
+        toast.dismiss('submitting');
+
+        toast.success('Redirecionando para o pagamento!');
+      }
 
     } catch (error) {
 
@@ -193,7 +213,7 @@ export default function FormularioMercadoPago() {
         draggable
         pauseOnHover
       />
-      
+
       <Script
         src="https://www.mercadopago.com/v2/security.js"
         data-view="item"
@@ -236,7 +256,11 @@ export default function FormularioMercadoPago() {
             </div>
             <div className="bg-white/20 p-4 rounded-lg">
               <p className="text-sm opacity-90 mb-1">Investimento total</p>
-              <p className="text-2xl font-bold">R$ 2.000,00</p>
+              {isCursoMentoria ? (
+                <p className="text-2xl font-bold">R$ 500.00</p>
+              ) : (
+                <p className="text-2xl font-bold">R$ 2.000,00</p>
+              )}
               <p className="text-xs opacity-80 mt-1">ou parcele em até 12x com juros</p>
             </div>
           </div>
@@ -404,9 +428,7 @@ export default function FormularioMercadoPago() {
                     ))}
                   </select>
                 </div>
-
               </div>
-
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-1">
                   Curso
@@ -417,34 +439,57 @@ export default function FormularioMercadoPago() {
                   onChange={handleChange}
                   className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent transition-all"
                 >
-                  <option>Curso CADI - Carreira do Investidor (R$ 2.000,00)</option>
+                  <option></option>
+                  {cursos.map((curso) => (
+                    <option key={curso.value} value={curso.value}>
+                      {curso.label}
+                    </option>
+                  ))}
                 </select>
               </div>
 
               <div className="bg-gray-50 p-4 rounded-lg border border-gray-200">
                 <div className="flex justify-between items-center">
                   <span className="font-medium text-gray-700">Valor Total:</span>
-                  <span className="text-xl font-bold text-green-600">R$ 2.000,00</span>
+                  {isCursoMentoria ? (
+                    <span className="text-xl font-bold text-green-600">R$ 500.00</span>
+                  ) : (
+                    <span className="text-xl font-bold text-green-600">R$ 2.000,00</span>
+                  )}
                 </div>
                 <p className="text-sm text-gray-500 mt-1 text-right">Pagamento único ou parcele no cartão</p>
               </div>
 
-              <button
-                type="submit"
-                disabled={isSubmitting}
-                className={`w-full py-3 px-4 bg-yellow-500 hover:from-green-700 hover:to-yello-950 text-blue font-medium rounded-lg shadow-md hover:shadow-lg transition-all duration-300 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500 
-                  ${isSubmitting ? 'opacity-70 cursor-not-allowed flex justify-center items-center' :
-                    ''}`}
-              >
-                {isSubmitting ? (
-                  <>
-                    Processando...
-                  </>
-                ) : (
-                  'Finalizar Inscrição'
-                )}
+              {isCursoMentoria ? (
 
-              </button>
+                <div>
+                  <button
+                    type="submit"
+                    // onClick={() => setModalAssinaturaMentoriaAberta(true)} 
+                    className="w-full py-3 px-4 bg-yellow-500 hover:from-green-700 hover:to-yello-950 text-blue font-medium rounded-lg shadow-md hover:shadow-lg transition-all duration-300 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500">
+                    Finalizar Inscrição
+                  </button>
+                  <ModalAssinaturaMentoria isOpen={modalAssinaturaMentoriaAberta} onClose={() => setModalAssinaturaMentoriaAberta(false)} />
+                </div>
+
+              ) : (
+                <button
+                  type="submit"
+                  disabled={isSubmitting}
+                  className={`w-full py-3 px-4 bg-yellow-500 hover:from-green-700 hover:to-yello-950 text-blue font-medium rounded-lg shadow-md hover:shadow-lg transition-all duration-300 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500 
+                  ${isSubmitting ? 'opacity-70 cursor-not-allowed flex justify-center items-center' :
+                      ''}`}
+                >
+                  {isSubmitting ? (
+                    <>
+                      Processando...
+                    </>
+                  ) : (
+                    'Finalizar Inscrição'
+                  )}
+                </button>
+              )}
+
             </form>
           </div>
         </div>

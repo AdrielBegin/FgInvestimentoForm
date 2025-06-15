@@ -9,6 +9,7 @@
     "lint": "next lint"
   },
   "dependencies": {
+    "@headlessui/react": "^2.2.4",
     "@mercadopago/sdk-react": "^0.0.21",
     "axios": "^1.8.4",
     "firebase": "^11.6.0",
