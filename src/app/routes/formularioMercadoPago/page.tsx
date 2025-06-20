@@ -6,7 +6,7 @@ import FormularioMercadoPago from "@/src/components/formMecadoPago/formMercadoPa
 export default function FormMecadoPagoPage() {
 
   return (
-    <div className="">
+    <div>
       <FormularioMercadoPago />
     </div>
   );

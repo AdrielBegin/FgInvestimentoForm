@@ -1,0 +1,3 @@
+interface InvestimentoCursoProps {
+  isCursoMentoria: boolean;
+}
