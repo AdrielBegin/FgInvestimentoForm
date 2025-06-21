@@ -37,8 +37,7 @@ const UserProvider = ({ children }: { children: ReactNode }) => {
         try {
             await signOut(auth);
             setUser(null);
-        } catch (error) {
-            console.error("Erro ao fazer logout:", error);
+        } catch (error) {            
             throw error;
         }
     };
@@ -61,8 +60,7 @@ const UserProvider = ({ children }: { children: ReactNode }) => {
                             name: userData.name ?? displayName ?? null,
                             role: userData.role ?? null,
                         });
-                    } else {
-                        console.warn(`O usuário com uid ${uid} não foi encontrado na coleção 'users'.`);
+                    } else {                        
                         setUser({
                             uid,
                             email: email ?? null,
@@ -70,8 +68,7 @@ const UserProvider = ({ children }: { children: ReactNode }) => {
                             role: null, // Role não encontrada
                         });
                     }
-                } catch (error) {
-                    console.error("Erro ao buscar informações do usuário no Firestore:", error);
+                } catch (error) {                    
                     setUser({
                         uid,
                         email: email ?? null,
