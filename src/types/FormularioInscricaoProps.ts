@@ -12,5 +12,5 @@ export interface FormularioInscricaoProps {
   modalidadeDeAulas: Option[];
   cursos: Option[];
   modalAssinaturaMentoriaAberta: boolean;
-  setModalAssinaturaMentoriaAberta: Dispatch<SetStateAction<boolean>>;
+  setModalAssinaturaMentoriaAberta: Dispatch<SetStateAction<boolean>>;  
 }

@@ -1,12 +1,11 @@
 import { FormularioInscricaoProps } from '@/src/types/FormularioInscricaoProps';
-import React from 'react';
+import React, { useRef } from 'react';
 import { CampoFormulario } from '../campoFormulario/CampoFormulario';
 import { CabecalhoFormulario } from '../cabecalhoFormulario/CabecalhoFormulario';
 import { SelectFormulario } from '../selectFormulario/SelectFormulario';
 import { ResumoPagamento } from '../resumoPagamento/ResumoPagamento';
 import ModalAssinaturaMentoria from '../modals/ModalAssinaturaMentoria';
 import { BotaoEnvio } from '../botaoEnvio/BotaoEnvio';
-
 
 export const FormularioInscricao: React.FC<FormularioInscricaoProps> = ({
   formData,
@@ -19,7 +18,7 @@ export const FormularioInscricao: React.FC<FormularioInscricaoProps> = ({
   modalidadeDeAulas,
   cursos,
   modalAssinaturaMentoriaAberta,
-  setModalAssinaturaMentoriaAberta
+  setModalAssinaturaMentoriaAberta,  
 }) => (
   <div className="w-full md:w-3/5 p-8">
     <CabecalhoFormulario 
@@ -72,6 +71,7 @@ export const FormularioInscricao: React.FC<FormularioInscricaoProps> = ({
           nome="cep"
           valor={formData.cep}
           onChange={handleCepChange}
+          maxLength={9}
           obrigatorio
         />
         

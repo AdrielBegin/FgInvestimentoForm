@@ -1,4 +1,4 @@
-import React, { ChangeEvent } from 'react';
+import { ChangeEvent } from 'react';
 export interface CampoFormularioProps {
   label: string;
   tipo: string;

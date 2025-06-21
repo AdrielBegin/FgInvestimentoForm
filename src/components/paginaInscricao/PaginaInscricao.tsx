@@ -23,7 +23,7 @@ export default function PaginaInscricao({
 }) {
     const router = useRouter();
     const { user, loading } = useContext(UserContext);
-    const { createMercadoPagoCheckout } = useMercadoPago();
+    const { createMercadoPagoCheckout } = useMercadoPago();    
 
     const [formData, setFormData] = useState({
         id: uuidv4(),
@@ -61,9 +61,10 @@ export default function PaginaInscricao({
         { value: 'mentoria', label: 'Mentoria (R$ 500.00)' }
     ];
 
+
     useEffect(() => {
         setIsCursoMentoria(formData.curso === "mentoria");
-    }, [formData.curso]);
+    }, [formData.curso]);    
 
     const getCpfCnpjMask = (value: string): string => {
         const numeric = value.replace(/\D/g, '');
@@ -112,17 +113,14 @@ export default function PaginaInscricao({
         }
     };
 
-    const handleCepChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
-        let cep = e.target.value.replace(/\D/g, '');
-        if (cep.length > 5) {
-            cep = cep.substring(0, 5) + '-' + cep.substring(5, 8);
-        }
-        setFormData(prev => ({ ...prev, cep: e.target.value }));
+    const handleCepChange = async (e: any) => {
+        const cep = e.target.value.replace(/\D/g, '');
+        setFormData((prev) => ({ ...prev, cep: e.target.value }));
 
         if (cep.length === 8) {
             const response = await axios.get(`https://viacep.com.br/ws/${cep}/json/`);
             if (!response.data.erro) {
-                setFormData(prev => ({
+                setFormData((prev) => ({
                     ...prev,
                     estado: response.data.uf,
                     cidade: response.data.localidade,
@@ -151,7 +149,6 @@ export default function PaginaInscricao({
 
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
-
         setIsSubmitting(true);
 
         try {
@@ -174,6 +171,7 @@ export default function PaginaInscricao({
                 toast.dismiss('submitting');
                 toast.success('Redirecionando para o pagamento!');
             } else if (formData.curso === "mentoria") {
+                
                 setModalAssinaturaMentoriaAberta(true);
                 toast.dismiss('submitting');
                 toast.success('Redirecionando para o pagamento!');
@@ -191,12 +189,10 @@ export default function PaginaInscricao({
         <main className="min-h-screen bg-gradient-to-br from-green-50 flex items-center justify-center p-4">
             <ToastNotificacao />
             <SegurancaMercadoPago />
-
             <div className="w-full max-w-4xl bg-white rounded-2xl shadow-xl overflow-hidden">
                 <div className="md:flex">
                     <InformacoesCurso fg={fg} isCursoMentoria={isCursoMentoria} />
-
-                    <FormularioInscricao
+                    <FormularioInscricao                        
                         formData={formData}
                         handleChange={handleChange}
                         handleSubmit={handleSubmit}
