@@ -3,7 +3,7 @@ import Link from "next/link";
 import { Roboto } from "next/font/google";
 import { FaInstagram, FaFacebook,FaWhatsapp } from "react-icons/fa";
 import { FaBookOpen, FaBitcoin, FaShieldAlt, FaChartLine, FaBullseye } from "react-icons/fa";
-import fg from '@/public/logo/LogoFG.svg';
+import fg from '@/public/logo/FgSemFundo.png';
 import quemSomos from '@/src/app/quemsomos.png'
 
 const roboto = Roboto({
