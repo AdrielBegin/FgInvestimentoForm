@@ -42,7 +42,7 @@ export default function Home() {
                         O Curso CADI oferece um método exclusivo com material 100% apostilado, práticas em criptomoedas e gestão de risco.
                     </p>
                     <a
-                        href="routes/login"
+                        href="routes/pagina-inscricao"
                         className="inline-block bg-yellow-400 hover:bg-yellow-500 text-blue-900 px-8 py-4 rounded-full font-bold text-lg shadow-lg transition-colors"
                     >
                         Faça sua Inscrição
