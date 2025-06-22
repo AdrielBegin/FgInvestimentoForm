@@ -21,8 +21,8 @@ export default function Home() {
                 <Image
                     src={fg}
                     alt="Logo"
-                    width={100}
-                    height={100}
+                    width={150}
+                    height={150}
                     className="filter brightness-0 invert"                    
                 />
                 <nav className="flex gap-4 items-center text-base">

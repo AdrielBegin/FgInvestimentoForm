@@ -3,14 +3,14 @@ import { FC } from 'react';
 import { BeneficioItem } from '../beneficioItem/BeneficioItem';
 import { InvestimentoCurso } from '../investimentoCurso/InvestimentoCurso';
 
-// Componente funcional com tipagem explícita
+
 export const InformacoesCurso: FC<InformacoesCursoProps> = ({ fg, isCursoMentoria }) => (
-  <div className="w-full md:w-2/5 bg-blue-600 p-8 text-white">
+  <div className="w-full md:w-2/5 bg-blue-600 text-white flex flex-col justify-center items-center p-8 min-h-screen">
     <div className="mb-6 flex justify-center">
       <Image
         src={fg}
         alt="Logo da empresa"
-        width={150}
+        width={230}
         height={150}
         className="filter brightness-0 invert"
       />
