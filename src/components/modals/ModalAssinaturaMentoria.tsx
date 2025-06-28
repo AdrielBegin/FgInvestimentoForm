@@ -15,7 +15,7 @@ export default function ModalAssinaturaMentoria({ isOpen, onClose }: ModalAssina
         nome: "",
         email: "",
         cpf: "",
-        valor: 500,
+        valor: 10,
         billing_day: "5",
         repetitions: 12,
     });
