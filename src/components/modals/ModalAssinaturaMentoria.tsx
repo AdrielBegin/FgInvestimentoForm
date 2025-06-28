@@ -15,7 +15,7 @@ export default function ModalAssinaturaMentoria({ isOpen, onClose }: ModalAssina
         nome: "",
         email: "",
         cpf: "",
-        valor: 10,
+        valor: 500,
         billing_day: "5",
         repetitions: 12,
     });
@@ -41,7 +41,7 @@ export default function ModalAssinaturaMentoria({ isOpen, onClose }: ModalAssina
 
         try {
             const planData = {
-                reason: "Assinatura do Curso CADI",
+                reason: "Mentoria",
                 transactionAmount: formData.valor,
                 frequency: 1,
                 frequencyType: "months",
