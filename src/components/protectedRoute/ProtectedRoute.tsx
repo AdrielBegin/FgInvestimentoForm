@@ -18,7 +18,7 @@ const ProtectedRoute = ({ children, requiredRole = 'user' }: ProtectedRouteProps
     const checkAuth = async () => {
       const unsubscribe = auth.onAuthStateChanged(async (user) => {
         if (!user) {
-          router.push('/login');
+          router.push('/routes/login');
           return;
         }
 

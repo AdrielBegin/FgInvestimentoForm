@@ -29,12 +29,12 @@ export default function TelaAdmin() {
        
     useEffect(() => {        
         if (!user) {
-            router.push('/login');
+            router.push('/routes/login');
             return;
         }
 
         if (user.role !== 'admin') {
-            router.push('/login');
+            router.push('/routes/login');
             return;
         }
     }, [user, loading, router]);

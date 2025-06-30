@@ -1,7 +1,7 @@
 'use client';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import db from "@/src/app/config/firebaseClient";
-import { doc, updateDoc } from 'firebase/firestore';
+import { doc, getDoc, updateDoc } from 'firebase/firestore';
 
 type ModalExcluirAlunoProps = {
     isOpen: boolean;
@@ -14,7 +14,31 @@ type ModalExcluirAlunoProps = {
 export default function ModalExcluirAluno({ isOpen, onClose, alunoId, alunoNome, onUpdate }: ModalExcluirAlunoProps) {
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState('');
+    const [nomeAlunoBuscado, setNomeAlunoBuscado] = useState('');
 
+    useEffect(() => {
+        const buscarAluno = async () => {
+            if (isOpen && alunoId) {
+                try {
+                    const alunoRef = doc(db, 'alunos', alunoId);
+                    
+                    const alunoSnap = await getDoc(alunoRef);
+
+                    if (alunoSnap.exists()) {
+                        const dados = alunoSnap.data();
+                        setNomeAlunoBuscado(dados.nome || 'Desconhecido');
+                    } else {
+                        setNomeAlunoBuscado('Não encontrado');
+                    }
+                } catch (error) {                 
+                    setNomeAlunoBuscado('Erro ao carregar');
+                }
+            }
+        };
+
+        buscarAluno();
+    }, [isOpen, alunoId]);
+    
     const handleExcluir = async () => {
         try {
             setLoading(true);
@@ -39,7 +63,7 @@ export default function ModalExcluirAluno({ isOpen, onClose, alunoId, alunoNome,
     if (!isOpen) return null;
 
     return (
-        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 z-50">
+        <div className="fixed inset-0 bg-black bg-opacity-30 backdrop-blur-sm flex items-center justify-center p-4 z-50">
             <div className="bg-white rounded-lg shadow-xl w-full max-w-md">
                 <div className="p-6">
                     <div className="flex justify-between items-start mb-5">
@@ -55,11 +79,11 @@ export default function ModalExcluirAluno({ isOpen, onClose, alunoId, alunoNome,
 
                     <div className="mb-6">
                         <p className="text-gray-800 text-base">
-                            Tem certeza que deseja excluir o aluno <span className="font-semibold">{alunoNome}</span>?
+                            Tem certeza que deseja excluir o aluno <span className="font-semibold">{nomeAlunoBuscado}</span>?
                         </p>
-                        {/* <p className="text-sm text-gray-500 mt-2 leading-relaxed break-words">
+                        <p className="text-sm text-gray-500 mt-2 leading-relaxed break-words">
                             Esta é uma exclusão lógica. O registro será mantido no sistema mas marcado como excluído.
-                        </p> */}
+                        </p>
                     </div>
 
                     {error && (

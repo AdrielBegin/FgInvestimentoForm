@@ -181,26 +181,27 @@ export default function TabelaAlunosDesktop({
               <td className=" px-4 py-4 whitespace-nowrap text-right text-sm font-medium">
                 <button onClick={() => abrirModalEdicao(aluno.id)} className="text-green-600 hover:text-green-900 mr-3">Editar</button>
                 <button onClick={() => abrirModalExclusao(aluno.id)} className="text-red-600 hover:text-red-900">Excluir</button>
-                
-                <ModalExcluirAluno
-                  isOpen={modalExclusaoAberto}
-                  onClose={() => setModalExclusaoAberto(false)}
-                  alunoId={alunoSelecionado || ''}
-                  alunoNome={aluno.nome || ''}
-                  onUpdate={handleExclusao}                                      
-                />
 
-                <ModalEdicaoAluno
-                  isOpen={modalEdicaoAberto}
-                  onClose={() => setModalEdicaoAberto(false)}
-                  alunoId={alunoSelecionado || ''}
-                  onUpdate={handleAtualizacao}
-                />
               </td>
             </tr>
           ))}
         </tbody>
       </table>
+
+      <ModalExcluirAluno
+        isOpen={modalExclusaoAberto}
+        onClose={() => setModalExclusaoAberto(false)}
+        alunoId={alunoSelecionado || ''}
+        alunoNome={alunoSelecionado || ''}
+        onUpdate={handleExclusao}
+      />
+
+      <ModalEdicaoAluno
+        isOpen={modalEdicaoAberto}
+        onClose={() => setModalEdicaoAberto(false)}
+        alunoId={alunoSelecionado || ''}
+        onUpdate={handleAtualizacao}
+      />
     </div>
   );
 }
