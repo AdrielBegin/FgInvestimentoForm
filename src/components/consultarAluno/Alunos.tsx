@@ -130,61 +130,70 @@ export default function ConsultaAlunos() {
   };
 
   const handleBuscar = async () => {
-
     setCarregando(true);
 
     const alunosRef = collection(db, 'alunos');
-
-    const conditions = [];
-
-    if (busca.trim()) {
-      const campo = /^\d+$/.test(busca) ? 'cpfCnpj' : 'nome';
-      conditions.push(where(campo, '>=', busca));
-      conditions.push(where(campo, '<=', busca + '\uf8ff'));
+    let q = query(alunosRef);
+    
+    if (busca !== '') {
+      q = query(
+        alunosRef,
+        where('nome', '>=', busca),
+        where('nome', '<=', busca + '\uf8ff')
+      );
     }
-
-    if (dataInicio) {
-      const inicioDate = new Date(dataInicio);
-      inicioDate.setHours(0, 0, 0, 0);
-      const inicioString = inicioDate.toISOString();
-      conditions.push(where('dataCadastro', '>=', inicioString));
-    }
-
-    if (dataFim) {
-      const fimDate = new Date(dataFim);
-      fimDate.setHours(23, 59, 59, 999);
-      const fimString = fimDate.toISOString()
-      conditions.push(where('dataCadastro', '<=', fimString));
-    }
-
+    
     if (filtroStatus !== 'todos') {
-      conditions.push(where('status', '==', filtroStatus));
+      q = query(q, where('status', '==', filtroStatus));
     }
+    
+    if (dataInicio && dataFim) {
+      const dataInicioFormatada = formatarDataParaFiltro(dataInicio, 'inicio');
+      const dataFimFormatada = formatarDataParaFiltro(dataFim, 'fim');
 
-    if (conditions.length === 0) {
-      carregarTodosAlunos();
-      return;
+      q = query(q, where('dataCadastro', '>=', dataInicioFormatada));
+      q = query(q, where('dataCadastro', '<=', dataFimFormatada));
     }
-
-    const q = query(alunosRef, ...conditions);
 
     try {
+      
       const querySnapshot = await getDocs(q);
 
-      const resultados = querySnapshot.docs.map(doc => ({
-        id: doc.id,
-        ...(doc.data() as Omit<Aluno, 'id'>),
-        dataCadastro: doc.data().dataCadastro.toLocaleDateString("pt-BR"),
-        status: doc.data().status || ['Ativo', 'Inativo', 'Pendente'][Math.floor(Math.random() * 3)]
-      }));
+      const resultados = querySnapshot.docs
+        .filter((doc) => doc.data().excluido !== true) 
+        .map((doc) => {
+          const data = doc.data();
+          return {
+            id: doc.id,
+            nome: data.nome || "",
+            email: data.email || "",
+            cidade: data.cidade || "",
+            profissao: data.profissao || "",
+            numeroContato: data.numeroContato || "",
+            estado: data.estado || "",
+            cep: data.cep || "",
+            logradouro: data.logradouro || "",
+            cpfCnpj: data.cpfCnpj || "",
+            numeroCasa: data.numeroCasa || "",
+            modalidadeDeAula: data.modalidadeDeAula || "Não informado",
+            dataCadastro: data.dataCadastro || "Sem data",
+            status: data.status || "Indefinido"
+          } as Aluno;
+        });
 
       setAlunos(resultados);
+
+      if (resultados.length === 0) {
+        toast.info("Nenhum resultado encontrado.");
+      }
     } catch (error) {
-      console.error("Erro ao buscar alunos:", error);
-    } finally {
-      setCarregando(false);
+      toast.error("Erro ao buscar alunos.");
+      console.error("Erro na busca: ", error);
     }
+
+    setCarregando(false);
   };
+
 
   const handleExportExcel = () => {
     const dataToExport = alunos.map(aluno => ({
@@ -206,6 +215,13 @@ export default function ConsultaAlunos() {
     const workbook = XLSX.utils.book_new();
     XLSX.utils.book_append_sheet(workbook, worksheet, "alunos");
     XLSX.writeFile(workbook, "alunos.xlsx");
+  };
+
+  const formatarDataParaFiltro = (data: string, periodo: 'inicio' | 'fim'): string => {
+    const [ano, mes, dia] = data.split('-');
+    const hora = periodo === 'inicio' ? '00:00:00' : '23:59:59';
+
+    return `${dia}/${mes}/${ano}, ${hora}`;
   };
 
   const alunosFiltrados = filtroStatus === 'todos'
