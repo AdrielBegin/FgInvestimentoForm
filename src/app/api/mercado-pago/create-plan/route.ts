@@ -20,11 +20,11 @@ export async function POST(req: NextRequest) {
                 frequency_type: frequencyType || "months",
                 repetitions: repetitions || 12,
                 billing_day: parseInt(billingDay) || 5,
-                billing_day_proportional: true,
-                free_trial: {
-                    frequency: 1,
-                    frequency_type: "months"
-                },
+                billing_day_proportional: false,
+                // free_trial: {
+                //     frequency: 1,
+                //     frequency_type: "months"
+                // },
                 transaction_amount: transactionAmount || 50,
                 currency_id: currencyId
             },

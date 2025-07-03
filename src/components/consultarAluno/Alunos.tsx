@@ -1,7 +1,7 @@
 'use client';
 import React, { useState, useContext, useEffect } from 'react';
 import db from "@/src/app/config/firebaseClient";
-import { collection, query, where, getDocs } from 'firebase/firestore';
+import { collection, query, where, getDocs, Timestamp } from 'firebase/firestore';
 import { UserContext } from '@/src/components/providers/Providers';
 import { useRouter } from 'next/navigation';
 import * as XLSX from 'xlsx';
@@ -130,30 +130,31 @@ export default function ConsultaAlunos() {
   };
 
   const handleBuscar = async () => {
+
     setCarregando(true);
+
     const alunosRef = collection(db, 'alunos');
 
-    // Cria um array de condições de query
     const conditions = [];
 
-    // Adiciona condição de busca por texto se houver
     if (busca.trim()) {
       const campo = /^\d+$/.test(busca) ? 'cpfCnpj' : 'nome';
       conditions.push(where(campo, '>=', busca));
       conditions.push(where(campo, '<=', busca + '\uf8ff'));
     }
 
-    // Adiciona condições de data se existirem
     if (dataInicio) {
       const inicioDate = new Date(dataInicio);
       inicioDate.setHours(0, 0, 0, 0);
-      conditions.push(where('dataCadastro', '>=', inicioDate));
+      const inicioString = inicioDate.toISOString();
+      conditions.push(where('dataCadastro', '>=', inicioString));
     }
 
     if (dataFim) {
       const fimDate = new Date(dataFim);
       fimDate.setHours(23, 59, 59, 999);
-      conditions.push(where('dataCadastro', '<=', fimDate));
+      const fimString = fimDate.toISOString()
+      conditions.push(where('dataCadastro', '<=', fimString));
     }
 
     if (filtroStatus !== 'todos') {
